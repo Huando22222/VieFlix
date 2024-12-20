@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # vie_flix
 
 A new Flutter project.
@@ -24,6 +24,4 @@ samples, guidance on mobile development, and a full API reference.
 - search 
 - filter movie
 - copyright , policy [source Api belong to kkphim](https://www.kkphim.vip/)
-=======
-# VieFlix
->>>>>>> 671d49257d93b3d10d11cc7dfb81a78fca41b6b4
+
