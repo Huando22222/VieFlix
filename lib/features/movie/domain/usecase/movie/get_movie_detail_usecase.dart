@@ -7,8 +7,13 @@ import 'package:vie_flix/features/movie/domain/repository/movie/movie_repository
 class GetMovieDetailUsecase {
   final MovieRepository _movieRepository = GetIt.instance<MovieRepository>();
 
-  Future<Either<Failure, MovieDetailEntity>> call(
-      {required String slug}) async {
-    return await _movieRepository.getMovieDetail(slug: slug);
+  Future<Either<Failure, MovieDetailEntity>> call({
+    required String slug,
+    required String source,
+  }) async {
+    return await _movieRepository.getMovieDetail(
+      slug: slug,
+      source: source,
+    );
   }
 }

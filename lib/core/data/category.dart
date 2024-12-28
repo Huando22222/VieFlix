@@ -1,0 +1,26 @@
+import 'package:vie_flix/features/movie/domain/entity/category_entity.dart';
+
+final List<CategoryEntity> categories = [
+  CategoryEntity(slug: "hanh-dong", name: "Hành Động"),
+  CategoryEntity(slug: "phieu-luu", name: "Phiêu Lưu"),
+  CategoryEntity(slug: "hoat-hinh", name: "Hoạt Hình"),
+  CategoryEntity(slug: "hai", name: "Hài"),
+  CategoryEntity(slug: "hinh-su", name: "Hình Sự"),
+  CategoryEntity(slug: "tai-lieu", name: "Tài Liệu"),
+  CategoryEntity(slug: "chinh-kich", name: "Chính Kịch"),
+  CategoryEntity(slug: "gia-dinh", name: "Gia Đình"),
+  CategoryEntity(slug: "gia-tuong", name: "Giả Tưởng"),
+  CategoryEntity(slug: "lich-su", name: "Lịch Sử"),
+  CategoryEntity(slug: "kinh-di", name: "Kinh Dị"),
+  CategoryEntity(slug: "nhac", name: "Nhạc"),
+  CategoryEntity(slug: "bi-an", name: "Bí Ẩn"),
+  CategoryEntity(slug: "lang-man", name: "Lãng Mạn"),
+  CategoryEntity(slug: "khoa-hoc-vien-tuong", name: "Khoa Học Viễn Tưởng"),
+  CategoryEntity(slug: "gay-can", name: "Gây Cấn"),
+  CategoryEntity(slug: "chien-tranh", name: "Chiến Tranh"),
+  CategoryEntity(slug: "tam-ly", name: "Tâm Lý"),
+  CategoryEntity(slug: "tinh-cam", name: "Tình Cảm"),
+  CategoryEntity(slug: "co-trang", name: "Cổ Trang"),
+  CategoryEntity(slug: "mien-tay", name: "Miền Tây"),
+  CategoryEntity(slug: "phim-18", name: "Phim 18+"),
+];

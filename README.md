@@ -17,11 +17,17 @@ For help getting started with Flutter development, view the
 samples, guidance on mobile development, and a full API reference.
 
 ## feature:
+- login option 
+- options [nguonc,kkphim]
+- search compilation mixing options [nguonc,kkphim]
 - turn off light,
 - add favorites,
+- add category,
 - save progress,
 - change theme [in cache]()
 - search 
+- history search
 - filter movie
+- Feedback
 - copyright , policy [source Api belong to kkphim](https://www.kkphim.vip/)
 

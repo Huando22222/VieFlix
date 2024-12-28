@@ -2,25 +2,29 @@ import 'dart:developer';
 
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
-import 'package:vie_flix/features/movie/domain/entity/search_movie_entity.dart';
-import 'package:vie_flix/features/movie/domain/usecase/movie/get_list_search_movie_usecase.dart';
+import 'package:vie_flix/features/movie/domain/entity/feature_movie_entity.dart';
+import 'package:vie_flix/features/movie/domain/usecase/movie/get_list_feature_movie_usecase.dart';
 
 class MoreMovieController extends GetxController {
-  final GetListSearchMovieUsecase getListSearchMovieUsecase =
-      GetIt.instance<GetListSearchMovieUsecase>();
+  final GetListFeatureMovieUsecase getListFeatureMovieUsecase =
+      GetIt.instance<GetListFeatureMovieUsecase>();
 
   var isLoading = false.obs;
   var isLoadingMore = false.obs;
-  var releatedMovie = <SearchMovieEntity>[].obs;
-  var searchType = '';
+  var releatedMovie = <FeatureMovieEntity>[].obs;
+  String type = '';
+  String link = '';
   var currentPage = 1;
   final int limit = 10;
 
   @override
   void onInit() {
     super.onInit();
-    searchType = getType(typeInInt: Get.arguments['type']);
-    fetchData(page: currentPage);
+    log('type: ${Get.arguments['type']}');
+    setEndPoint(type: Get.arguments['type']);
+    fetchData(
+      page: currentPage,
+    );
   }
 
   Future fetchData({required int page}) async {
@@ -31,11 +35,8 @@ class MoreMovieController extends GetxController {
     }
 
     try {
-      final result = await getListSearchMovieUsecase.call(
-        path: searchType,
-        limit: limit,
-        page: page,
-      );
+      final result =
+          await getListFeatureMovieUsecase.call(link: '$link$type?page=$page');
       result.fold(
         (l) {
           Get.snackbar('Thất bại', l.errorMessage);
@@ -67,18 +68,36 @@ class MoreMovieController extends GetxController {
     }
   }
 
-  String getType({required int typeInInt}) {
-    switch (typeInInt) {
-      case 1:
-        return 'phim-le';
-      case 2:
-        return 'phim-bo';
-      case 3:
-        return 'hoat-hinh';
-      case 4:
-        return 'tv-shows';
+  void setEndPoint({required String type}) {
+    switch (type) {
+      case 'phim-le':
+        link = 'https://phimapi.com/v1/api/danh-sach/';
+        this.type = 'phim-le';
+        return;
+      case 'phim-bo':
+        link = 'https://phimapi.com/v1/api/danh-sach/';
+        this.type = 'phim-bo';
+        return;
+      case 'hoat-hinh':
+        link = 'https://phimapi.com/v1/api/danh-sach/';
+        this.type = 'hoat-hinh';
+        return;
+      case 'tv-shows':
+        link = 'https://phimapi.com/v1/api/danh-sach/';
+        this.type = 'tv-shows';
+        return;
+      case 'moi-cap-nhat-kkphim':
+        link = 'https://phimapi.com/danh-sach/';
+        this.type = 'phim-moi-cap-nhat';
+        return;
+      case 'moi-cap-nhat-NguonC':
+        link = 'https://phim.nguonc.com/api/films/';
+        this.type = 'phim-moi-cap-nhat';
+        return;
       default:
-        return 'phim-le';
+        link = 'https://phim.nguonc.com/api/films/danh-sach/';
+        this.type = type;
+        return;
     }
   }
 }

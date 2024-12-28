@@ -4,4 +4,5 @@ class AppRoute {
   static const detailMovieScreen = '/detail-movie';
   static const mainScreen = '/main';
   static const moreMovieScreen = '/more-movie';
+  static const settingScreen = '/setting';
 }

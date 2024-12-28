@@ -38,10 +38,13 @@ class MoreMovieScreen extends StatelessWidget {
                   list: moreMovieController.releatedMovie.value
                       .map(
                         (e) => CardEntity(
-                            name: e.name,
-                            originName: e.originName,
-                            urlImage: e.posterUrl,
-                            slug: e.slug),
+                          name: e.name,
+                          originName: e.originName,
+                          poster: e.posterUrl,
+                          thumbnail: e.thumbUrl,
+                          slug: e.slug,
+                          source: e.source,
+                        ),
                       )
                       .toList(),
                   isLoading: moreMovieController.isLoading.value,

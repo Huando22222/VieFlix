@@ -1,16 +1,30 @@
 import 'package:flutter/widgets.dart';
 
 class AppColor {
-  static const lightText = Color(0xff0a0a24);
-  static const lightBackground = Color(0xffebebf9);
-  static const lightPrimary = Color(0xff1c2063);
-  static const lightSecondary = Color(0xffdd838a);
-  static const lightAccent = Color(0xffb08330);
+  static const lightText = Color(0xFF06082d);
+  static const lightBackground = Color(0xFFeeeffc);
+  static const lightPrimary = Color(0xFF101b7e);
+  static const lightSecondary = Color(0xFFbc73ed);
+  static const lightAccent = Color(0xFFbe1bd0);
 
   // Dark Theme Colors
-  static const darkText = Color(0xffdbdbf5);
-  static const darkBackground = Color(0xff060614);
-  static const darkPrimary = Color(0xff9ca0e3);
-  static const darkSecondary = Color(0xff7c222a);
-  static const darkAccent = Color(0xffcfa24f);
+  static const darkText = Color(0xFFd2d4f9);
+  static const darkBackground = Color(0xFF030411);
+  static const darkPrimary = Color(0xFF818cef);
+  static const darkSecondary = Color(0xFF5b128c);
+  static const darkAccent = Color(0xFFd22fe4);
 }
+// :root[data-theme="light"] {
+//   --text: #06082d;
+//   --background: #eeeffc;
+//   --primary: #101b7e;
+//   --secondary: #bc73ed;
+//   --accent: #be1bd0;
+// }
+// :root[data-theme="dark"] {
+//   --text: #d2d4f9;
+//   --background: #030411;
+//   --primary: #818cef;
+//   --secondary: #5b128c;
+//   --accent: #d22fe4;
+// }

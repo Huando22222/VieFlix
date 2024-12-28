@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:developer';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -37,11 +39,12 @@ class CarouseWidget extends StatelessWidget {
                         AppRoute.detailMovieScreen,
                         arguments: {
                           'slug': data[index].slug,
+                          'source': data[index].source,
                         },
                       );
                     },
                     child: Image.network(
-                      data[index].urlImage,
+                      data[index].poster,
                       fit: BoxFit.cover,
                       width: 1000.0,
                     ),

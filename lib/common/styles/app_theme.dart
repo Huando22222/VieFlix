@@ -7,9 +7,10 @@ class AppTheme {
     useMaterial3: true,
     appBarTheme: const AppBarTheme(color: Colors.transparent),
     colorScheme: const ColorScheme.light(
-      primary: AppColor.lightPrimary,
-      secondary: AppColor.lightSecondary,
-    ),
+        surface: AppColor.lightBackground,
+        primary: AppColor.lightPrimary,
+        secondary: AppColor.lightSecondary,
+        onSurface: AppColor.lightAccent),
     textTheme: TextTheme(
       headlineMedium:
           AppText.headlineMedium.copyWith(color: AppColor.lightText),
@@ -29,8 +30,10 @@ class AppTheme {
     useMaterial3: true,
     appBarTheme: const AppBarTheme(color: Colors.transparent),
     colorScheme: const ColorScheme.dark(
+      surface: AppColor.darkBackground,
       primary: AppColor.darkPrimary,
       secondary: AppColor.darkSecondary,
+      onSurface: AppColor.darkAccent,
     ),
     textTheme: TextTheme(
       headlineMedium: AppText.headlineMedium.copyWith(color: AppColor.darkText),

@@ -1,11 +1,14 @@
+import 'dart:developer';
+
 import 'package:chewie/chewie.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
-import 'package:vie_flix/common/screen/skeleton_movie_detail.dart';
+import 'package:vie_flix/features/user/presentation/screen/skeleton_movie_detail.dart';
 import 'package:vie_flix/common/widget/scaffold_widget.dart';
 import 'package:vie_flix/features/movie/presentation/controller/movie_detail_controller.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class MovieDetailScreen extends StatelessWidget {
   MovieDetailScreen({super.key});
@@ -18,8 +21,10 @@ class MovieDetailScreen extends StatelessWidget {
       showDrawer: false,
       body: Obx(
         () {
-          if (movieDetailController.isLoading.value ||
-              movieDetailController.movieDetail.value == null) {
+          if (movieDetailController.isLoading
+                  .value /*||
+              movieDetailController.movieDetail.value == null */
+              ) {
             return const SkeletonMovieDetail();
           } else {
             return Column(
@@ -28,43 +33,113 @@ class MovieDetailScreen extends StatelessWidget {
                 AspectRatio(
                   aspectRatio: 16 / 9,
                   child: Center(
-                    child: Obx(() {
-                      if (movieDetailController.isShowingThumbnail.value) {
-                        return Stack(
-                          children: [
-                            GestureDetector(
-                              onTap: () {
+                    child: Obx(
+                      () {
+                        if (movieDetailController.isShowingThumbnail.value) {
+                          return GestureDetector(
+                            onTap: () {
+                              if (movieDetailController.isWebView.value) {
                                 movieDetailController.changeEpisode(
                                     movieDetailController.movieDetail.value!
-                                        .episodes[0].serverData[0].linkM3U8);
-                              },
-                              child: Image.network(movieDetailController
-                                  .movieDetail.value!.movie.thumbUrl),
+                                        .episodes[0].serverData[0].linkEmbed);
+                                return;
+                              }
+                              movieDetailController.changeEpisode(
+                                  movieDetailController.movieDetail.value!
+                                      .episodes[0].serverData[0].linkM3U8);
+                            },
+                            child: Stack(
+                              children: [
+                                Image.network(movieDetailController
+                                    .movieDetail.value!.thumbUrl),
+                                Center(
+                                  child: Icon(
+                                    Icons.play_circle_sharp,
+                                    color: Colors.black.withOpacity(0.7),
+                                    size: size.width * 0.2,
+                                  ),
+                                ),
+                              ],
                             ),
-                            Center(
-                              child: Icon(
-                                Icons.play_circle_sharp,
-                                color: Colors.black.withOpacity(0.7),
-                                size: size.width * 0.2,
-                              ),
-                            ),
-                          ],
-                        );
-                      } else {
-                        final chewieController =
-                            movieDetailController.chewieController.value;
-                        return chewieController != null &&
-                                chewieController
-                                    .videoPlayerController.value.isInitialized
-                            ? Chewie(controller: chewieController)
-                            : SpinKitThreeBounce(
-                                color: Theme.of(context).colorScheme.primary,
-                              );
-                      }
-                    }),
+                          );
+                        } else {
+                          return Obx(
+                            () {
+                              if (movieDetailController.isWebView.value) {
+                                return WebViewWidget(
+                                    controller: movieDetailController
+                                        .webViewController);
+                              } else {
+                                final chewieController = movieDetailController
+                                    .chewieController.value;
+                                return chewieController != null &&
+                                        chewieController.videoPlayerController
+                                            .value.isInitialized
+                                    ? Chewie(controller: chewieController)
+                                    : SpinKitThreeBounce(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                      );
+                              }
+                            },
+                          );
+                        }
+                      },
+                    ),
                   ),
                 ),
                 const SizedBox(height: 20),
+                Row(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        movieDetailController.isWebView.value = false;
+                        movieDetailController.changeEpisode(
+                            movieDetailController.movieDetail.value!.episodes[0]
+                                .serverData[0].linkM3U8);
+                      },
+                      child: Text('sv1 (recommended)'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        movieDetailController.isWebView.value = true;
+                        movieDetailController.changeEpisode(
+                            movieDetailController.movieDetail.value!.episodes[0]
+                                .serverData[0].linkEmbed);
+                      },
+                      child: Text('webView'),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          movieDetailController.setSource(source: "KK");
+                        },
+                        child: Text('KKPhim'),
+                      ),
+                    ),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          movieDetailController.setSource(source: "NC");
+                        },
+                        child: Text('NguonC'),
+                      ),
+                    ),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          movieDetailController.setSource(source: "OP");
+                        },
+                        child: Text('OPhim'),
+                      ),
+                    ),
+                  ],
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -74,12 +149,11 @@ class MovieDetailScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            movieDetailController.movieDetail.value!.movie.name,
+                            movieDetailController.movieDetail.value!.name,
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
                           Text(
-                            movieDetailController
-                                .movieDetail.value!.movie.originName,
+                            movieDetailController.movieDetail.value!.originName,
                             style: Theme.of(context).textTheme.titleSmall,
                           ),
                         ],
@@ -106,7 +180,7 @@ class MovieDetailScreen extends StatelessWidget {
                       child: Column(
                         children: [
                           Text(movieDetailController
-                              .movieDetail.value!.movie.content),
+                              .movieDetail.value!.description),
                           Table(
                             columnWidths: const {
                               0: IntrinsicColumnWidth(),
@@ -120,7 +194,7 @@ class MovieDetailScreen extends StatelessWidget {
                                     padding:
                                         EdgeInsets.only(left: size.width * 0.1),
                                     child: Text(movieDetailController
-                                        .movieDetail.value!.movie.time),
+                                        .movieDetail.value!.time),
                                   ),
                                 ],
                               ),
@@ -132,11 +206,11 @@ class MovieDetailScreen extends StatelessWidget {
                                         EdgeInsets.only(left: size.width * 0.1),
                                     child: Text(
                                       movieDetailController.movieDetail.value
-                                                  ?.movie.country.isNotEmpty ==
+                                                  ?.country.isNotEmpty ==
                                               true
                                           ? movieDetailController
-                                              .movieDetail.value!.movie.country
-                                              .map((c) => c.name)
+                                              .movieDetail.value!.country
+                                              .map((c) => c)
                                               .join(', ')
                                           : 'No countries available',
                                       softWrap: true,
@@ -152,11 +226,11 @@ class MovieDetailScreen extends StatelessWidget {
                                         EdgeInsets.only(left: size.width * 0.1),
                                     child: Text(
                                       movieDetailController.movieDetail.value
-                                                  ?.movie.category.isNotEmpty ==
+                                                  ?.category.isNotEmpty ==
                                               true
                                           ? movieDetailController
-                                              .movieDetail.value!.movie.category
-                                              .map((c) => c.name)
+                                              .movieDetail.value!.category
+                                              .map((c) => c)
                                               .join(', ')
                                           : 'No category available',
                                       softWrap: true,
@@ -171,7 +245,7 @@ class MovieDetailScreen extends StatelessWidget {
                                     padding:
                                         EdgeInsets.only(left: size.width * 0.1),
                                     child: Text(movieDetailController
-                                        .movieDetail.value!.movie.year
+                                        .movieDetail.value!.year
                                         .toString()),
                                   ),
                                 ],
@@ -183,10 +257,7 @@ class MovieDetailScreen extends StatelessWidget {
                                     padding:
                                         EdgeInsets.only(left: size.width * 0.1),
                                     child: Text(movieDetailController
-                                        .movieDetail
-                                        .value!
-                                        .movie
-                                        .episodeCurrent),
+                                        .movieDetail.value!.episodeCurrent),
                                   ),
                                 ],
                               ),
@@ -197,7 +268,7 @@ class MovieDetailScreen extends StatelessWidget {
                                     padding:
                                         EdgeInsets.only(left: size.width * 0.1),
                                     child: Text(movieDetailController
-                                        .movieDetail.value!.movie.episodeTotal),
+                                        .movieDetail.value!.episodeTotal),
                                   ),
                                 ],
                               ),
@@ -209,11 +280,10 @@ class MovieDetailScreen extends StatelessWidget {
                                         EdgeInsets.only(left: size.width * 0.1),
                                     child: Text(
                                       movieDetailController.movieDetail.value
-                                                  ?.movie.actor.isNotEmpty ==
+                                                  ?.actor.isNotEmpty ==
                                               true
                                           ? movieDetailController
-                                              .movieDetail.value!.movie.actor
-                                              .join(', ')
+                                              .movieDetail.value!.actor
                                           : 'No actor available',
                                       softWrap: true,
                                     ),
@@ -249,10 +319,7 @@ class MovieDetailScreen extends StatelessWidget {
                                     Icons.star_rate_rounded,
                                   ),
                                   Text(
-                                    movieDetailController.movieDetail.value!
-                                        .movie.tmdb.voteAverage
-                                        .toStringAsFixed(1)
-                                        .toString(),
+                                    "haha",
                                   ),
                                 ],
                               ),
@@ -261,7 +328,7 @@ class MovieDetailScreen extends StatelessWidget {
                               width: 10,
                             ),
                             Text(
-                              '${movieDetailController.movieDetail.value!.movie.tmdb.voteCount.toString()} lượt đánh giá',
+                              ' lượt đánh giá',
                             ),
                             Spacer(),
                             Image.asset(
@@ -273,11 +340,13 @@ class MovieDetailScreen extends StatelessWidget {
                           ],
                         ),
                         Text(
-                          '${movieDetailController.movieDetail.value!.movie.year} | ${movieDetailController.movieDetail.value!.movie.episodeCurrent} | ${movieDetailController.movieDetail.value!.movie.country.first.name} ',
+                          '${movieDetailController.movieDetail.value!.year} | ${movieDetailController.movieDetail.value!.episodeCurrent} | ${movieDetailController.movieDetail.value!.country.first} ',
                         ),
                         Expanded(
                           child: DefaultTabController(
-                            length: 2,
+                            length: movieDetailController
+                                    .movieDetail.value!.episodes.length +
+                                1,
                             child: Column(
                               children: [
                                 TabBar(
@@ -358,7 +427,17 @@ class MovieDetailScreen extends StatelessWidget {
                                                       .length,
                                                   (indexEpisode) {
                                                     return _buildEpisodes(
-                                                      isSelected:
+                                                      isSelected: (movieDetailController
+                                                                  .selectEpisode
+                                                                  .value ==
+                                                              movieDetailController
+                                                                  .movieDetail
+                                                                  .value!
+                                                                  .episodes[
+                                                                      index]
+                                                                  .serverData[
+                                                                      indexEpisode]
+                                                                  .linkM3U8 ||
                                                           movieDetailController
                                                                   .selectEpisode
                                                                   .value ==
@@ -369,7 +448,7 @@ class MovieDetailScreen extends StatelessWidget {
                                                                       index]
                                                                   .serverData[
                                                                       indexEpisode]
-                                                                  .linkM3U8,
+                                                                  .linkEmbed),
                                                       context: context,
                                                       name:
                                                           movieDetailController
@@ -383,9 +462,21 @@ class MovieDetailScreen extends StatelessWidget {
                                                           movieDetailController
                                                               .movieDetail
                                                               .value!
-                                                              .movie
                                                               .thumbUrl,
                                                       onTap: () {
+                                                        if (movieDetailController
+                                                            .isWebView.value) {
+                                                          movieDetailController.changeEpisode(
+                                                              movieDetailController
+                                                                  .movieDetail
+                                                                  .value!
+                                                                  .episodes[
+                                                                      index]
+                                                                  .serverData[
+                                                                      indexEpisode]
+                                                                  .linkEmbed);
+                                                          return;
+                                                        }
                                                         movieDetailController
                                                             .changeEpisode(
                                                                 movieDetailController

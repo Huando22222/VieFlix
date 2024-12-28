@@ -4,7 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:vie_flix/features/movie/data/data_sources/remote/movie_remote_data_source.dart';
 import 'package:vie_flix/features/movie/data/repository/movie_repository_impl.dart';
 import 'package:vie_flix/features/movie/domain/repository/movie/movie_repository.dart';
-import 'package:vie_flix/features/movie/domain/usecase/movie/get_list_latest_movie_usecase.dart';
+import 'package:vie_flix/features/movie/domain/usecase/movie/get_list_feature_movie_usecase.dart';
 import 'package:vie_flix/features/movie/domain/usecase/movie/get_list_search_movie_usecase.dart';
 import 'package:vie_flix/features/movie/domain/usecase/movie/get_movie_detail_usecase.dart';
 
@@ -20,8 +20,8 @@ void setupServiceLocator() {
     () => MovieRepositoryImpl(),
   );
   // usecase
-  sl.registerLazySingleton<GetListLatestMovieUsecase>(
-    () => GetListLatestMovieUsecase(),
+  sl.registerLazySingleton<GetListFeatureMovieUsecase>(
+    () => GetListFeatureMovieUsecase(),
   );
   sl.registerLazySingleton<GetListSearchMovieUsecase>(
     () => GetListSearchMovieUsecase(),

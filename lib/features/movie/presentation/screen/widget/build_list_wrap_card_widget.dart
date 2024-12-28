@@ -7,6 +7,7 @@ class BuildListWrapCardWidget extends StatelessWidget {
   final List<CardEntity> list;
   final bool isLoading;
   final int? itemCount;
+
   const BuildListWrapCardWidget({
     super.key,
     this.itemCount,
@@ -38,8 +39,10 @@ class BuildListWrapCardWidget extends StatelessWidget {
               data: CardEntity(
                 name: list[index].name,
                 originName: list[index].originName,
-                urlImage: list[index].urlImage,
+                poster: list[index].poster,
+                thumbnail: list[index].thumbnail,
                 slug: list[index].slug,
+                source: list[index].source,
               ),
             ),
           ),

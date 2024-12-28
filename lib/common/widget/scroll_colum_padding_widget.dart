@@ -9,7 +9,6 @@ class ScrollColumPaddingWidget extends StatelessWidget {
   final double? paddingHorizontal;
   final double? paddingBottom;
   final ScrollController? controller;
-
   const ScrollColumPaddingWidget({
     super.key,
     this.crossAxisAlignment,
@@ -36,6 +35,8 @@ class ScrollColumPaddingWidget extends StatelessWidget {
         right: paddingHorizontal ?? 10,
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: crossAxisAlignment ?? CrossAxisAlignment.start,
         children: children,
       ),

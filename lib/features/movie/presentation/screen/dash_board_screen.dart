@@ -3,29 +3,22 @@ import 'package:get/get.dart';
 import 'package:vie_flix/common/widget/Scroll_Colum_padding_widget.dart';
 import 'package:vie_flix/config/routes/app_route.dart';
 import 'package:vie_flix/features/movie/domain/entity/card_entity.dart';
-import 'package:vie_flix/features/movie/presentation/controller/animated_movie_controller.dart';
 import 'package:vie_flix/features/movie/presentation/controller/feature_movie_controller.dart';
-import 'package:vie_flix/features/movie/presentation/controller/latest_movie_controller.dart';
-import 'package:vie_flix/features/movie/presentation/controller/series_movie_controller.dart';
-import 'package:vie_flix/features/movie/presentation/controller/tv_series_movie_controller.dart';
 import 'package:vie_flix/features/movie/presentation/screen/widget/build_list_view_card_widget.dart';
 import 'package:vie_flix/features/movie/presentation/screen/widget/build_title_widget.dart';
 import 'package:vie_flix/features/movie/presentation/screen/widget/carouse_widget.dart';
+import 'package:vie_flix/features/user/presentation/controller/filter_controller.dart';
 
 class DashBoardScreen extends StatelessWidget {
   const DashBoardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final LatestMovieController latestMovieController = Get.find();
-    final FeatureMovieController featureMovieController =
-        Get.find<FeatureMovieController>();
-    final SeriesMovieController seriesMovieController =
-        Get.find<SeriesMovieController>();
-    final AnimatedMovieController animatedMovieController =
-        Get.find<AnimatedMovieController>();
-    final TvSeriesMovieController tvSeriesMovieController =
-        Get.find<TvSeriesMovieController>();
+    final FeatureMovieController featureMovieController = Get.find();
+    //
+    final FilterController filterController = Get.find<FilterController>();
+    //
+
     final size = MediaQuery.of(context).size;
     return ScrollColumPaddingWidget(
       children: [
@@ -42,17 +35,76 @@ class DashBoardScreen extends StatelessWidget {
           child: Obx(
             () {
               return CarouseWidget(
-                data: latestMovieController.latestMovies.value
+                data: featureMovieController.latestMoviesKKPhim.value
                     .map((e) => CardEntity(
                           name: e.name,
                           originName: e.originName,
-                          urlImage: e.posterUrl,
+                          poster: e.posterUrl,
+                          thumbnail: e.thumbUrl,
                           slug: e.slug,
+                          source: e.source,
                         ))
                     .toList(),
               );
             },
           ),
+        ),
+        ElevatedButton(
+          onPressed: () async {
+            filterController.updateCategory();
+          },
+          child: Text('update '),
+        ),
+        ElevatedButton(
+          onPressed: () async {
+            filterController.test();
+          },
+          child: Text('log '),
+        ),
+        ...List.generate(
+          featureMovieController.movieFavListsNC.length,
+          (index) {
+            return Column(
+              children: [
+                const SizedBox(
+                  height: 20,
+                ),
+                BuildTitleWidget(
+                  title: featureMovieController.favName[index].name,
+                  onTap: () {
+                    Get.toNamed(
+                      AppRoute.moreMovieScreen,
+                      arguments: {
+                        'type': featureMovieController.favName[index].slug
+                      },
+                    );
+                  },
+                ),
+                SizedBox(
+                  height: size.height * 0.3,
+                  child: Obx(
+                    () {
+                      return BuildListWiewCardWidget(
+                        isLoading: featureMovieController
+                            .isloadingFavStatesNC[index].value,
+                        list:
+                            featureMovieController.movieFavListsNC[index].value
+                                .map((e) => CardEntity(
+                                      name: e.name,
+                                      originName: e.originName,
+                                      poster: e.thumbUrl,
+                                      thumbnail: e.thumbUrl,
+                                      slug: e.slug,
+                                      source: e.source,
+                                    ))
+                                .toList(),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            );
+          },
         ),
         const SizedBox(
           height: 20,
@@ -62,7 +114,7 @@ class DashBoardScreen extends StatelessWidget {
           onTap: () {
             Get.toNamed(
               AppRoute.moreMovieScreen,
-              arguments: {'type': 1},
+              arguments: {'type': 'moi-cap-nhat-kkphim'},
             );
           },
         ),
@@ -71,13 +123,16 @@ class DashBoardScreen extends StatelessWidget {
           child: Obx(
             () {
               return BuildListWiewCardWidget(
-                isLoading: latestMovieController.isLoading.value,
-                list: latestMovieController.latestMovies.value
+                isLoading:
+                    featureMovieController.isLoadingLatestMoviesKKPhim.value,
+                list: featureMovieController.latestMoviesKKPhim.value
                     .map((e) => CardEntity(
                           name: e.name,
                           originName: e.originName,
-                          urlImage: e.posterUrl,
+                          poster: e.posterUrl,
+                          thumbnail: e.thumbUrl,
                           slug: e.slug,
+                          source: e.source,
                         ))
                     .toList(),
               );
@@ -92,7 +147,7 @@ class DashBoardScreen extends StatelessWidget {
           onTap: () {
             Get.toNamed(
               AppRoute.moreMovieScreen,
-              arguments: {'type': 2},
+              arguments: {'type': 'phim-le'},
             );
           },
         ),
@@ -101,13 +156,16 @@ class DashBoardScreen extends StatelessWidget {
           child: Obx(
             () {
               return BuildListWiewCardWidget(
-                isLoading: featureMovieController.isLoading.value,
-                list: featureMovieController.featureMovies.value
+                isLoading:
+                    featureMovieController.isLoadingFeaturedMoviesKKPhim.value,
+                list: featureMovieController.featuredMoviesKKPhim.value
                     .map((e) => CardEntity(
                           name: e.name,
                           originName: e.originName,
-                          urlImage: e.posterUrl,
+                          poster: e.posterUrl,
+                          thumbnail: e.thumbUrl,
                           slug: e.slug,
+                          source: e.source,
                         ))
                     .toList(),
               );
@@ -122,7 +180,7 @@ class DashBoardScreen extends StatelessWidget {
           onTap: () {
             Get.toNamed(
               AppRoute.moreMovieScreen,
-              arguments: {'type': 3},
+              arguments: {'type': 'phim-bo'},
             );
           },
         ),
@@ -131,13 +189,16 @@ class DashBoardScreen extends StatelessWidget {
           child: Obx(
             () {
               return BuildListWiewCardWidget(
-                isLoading: seriesMovieController.isLoading.value,
-                list: seriesMovieController.seriesMovies.value
+                isLoading:
+                    featureMovieController.isLoadingSeriesMoviesKKPhim.value,
+                list: featureMovieController.seriesMoviesKKPhim.value
                     .map((e) => CardEntity(
                           name: e.name,
                           originName: e.originName,
-                          urlImage: e.posterUrl,
+                          poster: e.posterUrl,
+                          thumbnail: e.thumbUrl,
                           slug: e.slug,
+                          source: e.source,
                         ))
                     .toList(),
               );
@@ -152,7 +213,7 @@ class DashBoardScreen extends StatelessWidget {
           onTap: () {
             Get.toNamed(
               AppRoute.moreMovieScreen,
-              arguments: {'type': 3},
+              arguments: {'type': 'hoat-hinh'},
             );
           },
         ),
@@ -161,13 +222,16 @@ class DashBoardScreen extends StatelessWidget {
           child: Obx(
             () {
               return BuildListWiewCardWidget(
-                isLoading: animatedMovieController.isLoading.value,
-                list: animatedMovieController.animatedMovies.value
+                isLoading:
+                    featureMovieController.isLoadingAnimatedMoviesKKPhim.value,
+                list: featureMovieController.animatedMoviesKKPhim.value
                     .map((e) => CardEntity(
                           name: e.name,
                           originName: e.originName,
-                          urlImage: e.posterUrl,
+                          poster: e.posterUrl,
+                          thumbnail: e.thumbUrl,
                           slug: e.slug,
+                          source: e.source,
                         ))
                     .toList(),
               );
@@ -182,7 +246,7 @@ class DashBoardScreen extends StatelessWidget {
           onTap: () {
             Get.toNamed(
               AppRoute.moreMovieScreen,
-              arguments: {'type': 4},
+              arguments: {'type': 'tv-shows'},
             );
           },
         ),
@@ -191,13 +255,15 @@ class DashBoardScreen extends StatelessWidget {
           child: Obx(
             () {
               return BuildListWiewCardWidget(
-                isLoading: tvSeriesMovieController.isLoading.value,
-                list: tvSeriesMovieController.tvShows.value
+                isLoading: featureMovieController.isLoadingTvShowsKKPhim.value,
+                list: featureMovieController.tvShowsKKPhim.value
                     .map((e) => CardEntity(
                           name: e.name,
                           originName: e.originName,
-                          urlImage: e.posterUrl,
+                          poster: e.posterUrl,
+                          thumbnail: e.thumbUrl,
                           slug: e.slug,
+                          source: e.source,
                         ))
                     .toList(),
               );
