@@ -9,6 +9,7 @@ class FeatureMovieModel extends FeatureMovieEntity {
     required super.originName,
     required super.posterUrl,
     required super.thumbUrl,
+    required super.episodeCurrent,
   });
 
   factory FeatureMovieModel.fromJson(Map<String, dynamic> json) =>
@@ -22,5 +23,7 @@ class FeatureMovieModel extends FeatureMovieEntity {
         originName: json["origin_name"] ?? json["original_name"],
         posterUrl: json["poster_url"],
         thumbUrl: json["thumb_url"],
+        episodeCurrent:
+            json["current_episode"] ?? (json["episode_current"] ?? ""),
       );
 }

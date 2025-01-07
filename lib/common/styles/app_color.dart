@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class AppColor {
@@ -13,6 +14,9 @@ class AppColor {
   static const darkPrimary = Color(0xFF818cef);
   static const darkSecondary = Color(0xFF5b128c);
   static const darkAccent = Color(0xFFd22fe4);
+
+  static const kkphim = Colors.blueAccent;
+  static const nguonC = Colors.orange;
 }
 // :root[data-theme="light"] {
 //   --text: #06082d;

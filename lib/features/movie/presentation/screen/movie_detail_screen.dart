@@ -1,32 +1,54 @@
 import 'dart:developer';
 
 import 'package:chewie/chewie.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
+import 'package:showcaseview/showcaseview.dart';
+import 'package:vie_flix/common/widget/show_case_custome_widget.dart';
+import 'package:vie_flix/features/user/presentation/controller/app_setting_controller.dart';
+import 'package:vie_flix/features/user/presentation/controller/favorite_controller.dart';
 import 'package:vie_flix/features/user/presentation/screen/skeleton_movie_detail.dart';
 import 'package:vie_flix/common/widget/scaffold_widget.dart';
 import 'package:vie_flix/features/movie/presentation/controller/movie_detail_controller.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-class MovieDetailScreen extends StatelessWidget {
-  MovieDetailScreen({super.key});
+class MovieDetailScreen extends StatefulWidget {
+  const MovieDetailScreen({super.key});
+
+  @override
+  State<MovieDetailScreen> createState() => _MovieDetailScreenState();
+}
+
+class _MovieDetailScreenState extends State<MovieDetailScreen> {
   final MovieDetailController movieDetailController =
       Get.find<MovieDetailController>();
+
+  final AppSettingController appSettingController =
+      Get.find<AppSettingController>();
+
+  final FavoriteController favoriteController = Get.find<FavoriteController>();
+
+  final GlobalKey keySource = GlobalKey();
+
+  final GlobalKey keyTest = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
+    // final GlobalKey keySource = GlobalKey();
     final size = MediaQuery.of(context).size;
+
     return ScaffoldWidget(
       showDrawer: false,
       body: Obx(
         () {
-          if (movieDetailController.isLoading
-                  .value /*||
-              movieDetailController.movieDetail.value == null */
-              ) {
+          if (movieDetailController.isLoading.value) {
             return const SkeletonMovieDetail();
           } else {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              ShowCaseWidget.of(context).startShowCase([keySource, keyTest]);
+              // Sau khi kích hoạt, đặt lại isTrigger để không lặp lại
+            });
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -92,73 +114,108 @@ class MovieDetailScreen extends StatelessWidget {
                 const SizedBox(height: 20),
                 Row(
                   children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        movieDetailController.isWebView.value = false;
-                        movieDetailController.changeEpisode(
-                            movieDetailController.movieDetail.value!.episodes[0]
-                                .serverData[0].linkM3U8);
+                    Obx(
+                      () {
+                        return _buildServer(
+                            text: 'm3u8',
+                            onTap: () {
+                              movieDetailController.isWebView.value = false;
+                              movieDetailController.changeEpisode(
+                                  movieDetailController.movieDetail.value!
+                                      .episodes[0].serverData[0].linkM3U8);
+                            },
+                            isSelected: !movieDetailController.isWebView.value);
                       },
-                      child: Text('sv1 (recommended)'),
                     ),
-                    ElevatedButton(
-                      onPressed: () {
-                        movieDetailController.isWebView.value = true;
-                        movieDetailController.changeEpisode(
-                            movieDetailController.movieDetail.value!.episodes[0]
-                                .serverData[0].linkEmbed);
+                    Obx(
+                      () {
+                        return _buildServer(
+                            text: 'webView',
+                            onTap: () {
+                              movieDetailController.isWebView.value = true;
+                              movieDetailController.changeEpisode(
+                                  movieDetailController.movieDetail.value!
+                                      .episodes[0].serverData[0].linkEmbed);
+                            },
+                            isSelected: movieDetailController.isWebView.value);
                       },
-                      child: Text('webView'),
                     ),
+                    const Spacer(),
                   ],
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          movieDetailController.setSource(source: "KK");
-                        },
-                        child: Text('KKPhim'),
-                      ),
-                    ),
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          movieDetailController.setSource(source: "NC");
-                        },
-                        child: Text('NguonC'),
-                      ),
-                    ),
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          movieDetailController.setSource(source: "OP");
-                        },
-                        child: Text('OPhim'),
-                      ),
-                    ),
-                  ],
+                const SizedBox(
+                  height: 10,
+                ),
+                ShowCaseCustomeWidget(
+                  globalKey: keySource,
+                  title: "Nguồn phim",
+                  description:
+                      "bạn có thể lựa chọn nguồn phim nếu nguồn hiện tại không hoạt động",
+                  child: Row(
+                    children: [
+                      _buildSource(source: "KK", text: "KKphim"),
+                      _buildSource(source: "NC", text: "NguonC"),
+                      _buildSource(source: "OP", text: "Ophim"),
+                    ],
+                  ),
+                ),
+                ShowCaseCustomeWidget(
+                  globalKey: keyTest,
+                  title: "Test",
+                  description: "This is a test showcase",
+                  child: Text("Showcase Target"),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    ShowCaseWidget.of(context).startShowCase([keyTest]);
+                  },
+                  child: Text("Trigger Showcase"),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    ShowCaseWidget.of(context).startShowCase([keySource]);
+                    log('message');
+                  },
+                  child: Text("trigger"),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            movieDetailController.movieDetail.value!.name,
-                            style: Theme.of(context).textTheme.titleMedium,
+                    Obx(
+                      () {
+                        return IconButton(
+                          onPressed: () {
+                            appSettingController.changeShowGridEpisodes();
+                          },
+                          icon: Icon(
+                            appSettingController.isShowGridEpisodes.value
+                                ? Icons.grid_view
+                                : Icons.menu,
                           ),
-                          Text(
-                            movieDetailController.movieDetail.value!.originName,
-                            style: Theme.of(context).textTheme.titleSmall,
-                          ),
-                        ],
-                      ),
+                        );
+                      },
                     ),
+                    Obx(
+                      () {
+                        return IconButton(
+                          onPressed: () {
+                            if (favoriteController.isLoading.value) {
+                              return;
+                            }
+                            favoriteController.addOrRemoveFavorite(
+                                movieDetailController.favoriteMovie!);
+                          },
+                          icon: Icon(
+                            favoriteController.favorites.contains(
+                                    movieDetailController.favoriteMovie!)
+                                ? Icons.favorite
+                                : Icons.favorite_border,
+                          ),
+                        );
+                      },
+                    ),
+                    const Spacer(),
                     IconButton(
                       onPressed: () {
                         movieDetailController.isShowingDetail.value =
@@ -178,7 +235,16 @@ class MovieDetailScreen extends StatelessWidget {
                     child: SingleChildScrollView(
                       scrollDirection: Axis.vertical,
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          Text(
+                            movieDetailController.movieDetail.value!.name,
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                          Text(
+                            movieDetailController.movieDetail.value!.originName,
+                            style: Theme.of(context).textTheme.titleSmall,
+                          ),
                           Text(movieDetailController
                               .movieDetail.value!.description),
                           Table(
@@ -302,46 +368,6 @@ class MovieDetailScreen extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 5, vertical: 2),
-                              decoration: BoxDecoration(
-                                color: Colors.grey,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(5)),
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(
-                                    Icons.star_rate_rounded,
-                                  ),
-                                  Text(
-                                    "haha",
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              ' lượt đánh giá',
-                            ),
-                            Spacer(),
-                            Image.asset(
-                              'assets/images/playlist_icon.png',
-                              height: 25,
-                              width: 25,
-                              color: Theme.of(context).colorScheme.secondary,
-                            ),
-                          ],
-                        ),
-                        Text(
-                          '${movieDetailController.movieDetail.value!.year} | ${movieDetailController.movieDetail.value!.episodeCurrent} | ${movieDetailController.movieDetail.value!.country.first} ',
-                        ),
                         Expanded(
                           child: DefaultTabController(
                             length: movieDetailController
@@ -364,7 +390,7 @@ class MovieDetailScreen extends StatelessWidget {
                                                 .serverName);
                                       },
                                     ),
-                                    Tab(text: 'liên quan'),
+                                    const Tab(text: 'liên quan'),
                                   ],
                                 ),
                                 Expanded(
@@ -377,118 +403,156 @@ class MovieDetailScreen extends StatelessWidget {
                                           return SingleChildScrollView(
                                             child: Column(
                                               children: [
-                                                RichText(
-                                                  text: TextSpan(
-                                                    text: 'Click ',
-                                                    style: TextStyle(
-                                                        color: Colors.black,
-                                                        fontSize: 18),
-                                                    children: [
-                                                      TextSpan(
-                                                        text: 'here',
-                                                        style: TextStyle(
-                                                          color: Colors.blue,
-                                                          decoration:
-                                                              TextDecoration
-                                                                  .underline,
-                                                        ),
-                                                        recognizer:
-                                                            TapGestureRecognizer()
-                                                              ..onTap = () {
-                                                                ScaffoldMessenger.of(
-                                                                        context)
-                                                                    .showSnackBar(
-                                                                  SnackBar(
-                                                                      content: Text(
-                                                                          'You clicked on "here"!')),
-                                                                );
-                                                              },
-                                                      ),
-                                                      const WidgetSpan(
-                                                        alignment:
-                                                            PlaceholderAlignment
-                                                                .middle,
-                                                        child: Icon(
-                                                          Icons
-                                                              .arrow_drop_down_rounded,
-                                                          color: Colors.blue,
-                                                          size: 20,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                ...List.generate(
-                                                  movieDetailController
-                                                      .movieDetail
-                                                      .value!
-                                                      .episodes[index]
-                                                      .serverData
-                                                      .length,
-                                                  (indexEpisode) {
-                                                    return _buildEpisodes(
-                                                      isSelected: (movieDetailController
-                                                                  .selectEpisode
-                                                                  .value ==
-                                                              movieDetailController
-                                                                  .movieDetail
-                                                                  .value!
-                                                                  .episodes[
-                                                                      index]
-                                                                  .serverData[
-                                                                      indexEpisode]
-                                                                  .linkM3U8 ||
-                                                          movieDetailController
-                                                                  .selectEpisode
-                                                                  .value ==
-                                                              movieDetailController
-                                                                  .movieDetail
-                                                                  .value!
-                                                                  .episodes[
-                                                                      index]
-                                                                  .serverData[
-                                                                      indexEpisode]
-                                                                  .linkEmbed),
-                                                      context: context,
-                                                      name:
-                                                          movieDetailController
-                                                              .movieDetail
-                                                              .value!
-                                                              .episodes[index]
-                                                              .serverData[
-                                                                  indexEpisode]
-                                                              .name,
-                                                      thumbnail:
-                                                          movieDetailController
-                                                              .movieDetail
-                                                              .value!
-                                                              .thumbUrl,
-                                                      onTap: () {
-                                                        if (movieDetailController
-                                                            .isWebView.value) {
-                                                          movieDetailController.changeEpisode(
-                                                              movieDetailController
-                                                                  .movieDetail
-                                                                  .value!
-                                                                  .episodes[
-                                                                      index]
-                                                                  .serverData[
-                                                                      indexEpisode]
-                                                                  .linkEmbed);
-                                                          return;
-                                                        }
-                                                        movieDetailController
-                                                            .changeEpisode(
-                                                                movieDetailController
+                                                Obx(
+                                                  () {
+                                                    if (appSettingController
+                                                        .isShowGridEpisodes
+                                                        .value) {
+                                                      return Wrap(
+                                                        children: [
+                                                          ...List.generate(
+                                                            movieDetailController
+                                                                .movieDetail
+                                                                .value!
+                                                                .episodes[index]
+                                                                .serverData
+                                                                .length,
+                                                            (indexEpisode) {
+                                                              return _buildEpisodesGrid(
+                                                                isSelected: (movieDetailController
+                                                                            .selectEpisode
+                                                                            .value ==
+                                                                        movieDetailController
+                                                                            .movieDetail
+                                                                            .value!
+                                                                            .episodes[
+                                                                                index]
+                                                                            .serverData[
+                                                                                indexEpisode]
+                                                                            .linkM3U8 ||
+                                                                    movieDetailController
+                                                                            .selectEpisode
+                                                                            .value ==
+                                                                        movieDetailController
+                                                                            .movieDetail
+                                                                            .value!
+                                                                            .episodes[index]
+                                                                            .serverData[indexEpisode]
+                                                                            .linkEmbed),
+                                                                context:
+                                                                    context,
+                                                                name: movieDetailController
                                                                     .movieDetail
                                                                     .value!
                                                                     .episodes[
                                                                         index]
                                                                     .serverData[
                                                                         indexEpisode]
-                                                                    .linkM3U8);
-                                                      },
-                                                    );
+                                                                    .name,
+                                                                onTap: () {
+                                                                  if (movieDetailController
+                                                                      .isWebView
+                                                                      .value) {
+                                                                    movieDetailController.changeEpisode(movieDetailController
+                                                                        .movieDetail
+                                                                        .value!
+                                                                        .episodes[
+                                                                            index]
+                                                                        .serverData[
+                                                                            indexEpisode]
+                                                                        .linkEmbed);
+                                                                    return;
+                                                                  }
+                                                                  movieDetailController.changeEpisode(movieDetailController
+                                                                      .movieDetail
+                                                                      .value!
+                                                                      .episodes[
+                                                                          index]
+                                                                      .serverData[
+                                                                          indexEpisode]
+                                                                      .linkM3U8);
+                                                                },
+                                                              );
+                                                            },
+                                                          )
+                                                        ],
+                                                      );
+                                                    } else {
+                                                      return Column(
+                                                        children: [
+                                                          ...List.generate(
+                                                            movieDetailController
+                                                                .movieDetail
+                                                                .value!
+                                                                .episodes[index]
+                                                                .serverData
+                                                                .length,
+                                                            (indexEpisode) {
+                                                              return _buildEpisodes(
+                                                                isSelected: (movieDetailController
+                                                                            .selectEpisode
+                                                                            .value ==
+                                                                        movieDetailController
+                                                                            .movieDetail
+                                                                            .value!
+                                                                            .episodes[
+                                                                                index]
+                                                                            .serverData[
+                                                                                indexEpisode]
+                                                                            .linkM3U8 ||
+                                                                    movieDetailController
+                                                                            .selectEpisode
+                                                                            .value ==
+                                                                        movieDetailController
+                                                                            .movieDetail
+                                                                            .value!
+                                                                            .episodes[index]
+                                                                            .serverData[indexEpisode]
+                                                                            .linkEmbed),
+                                                                context:
+                                                                    context,
+                                                                name: movieDetailController
+                                                                    .movieDetail
+                                                                    .value!
+                                                                    .episodes[
+                                                                        index]
+                                                                    .serverData[
+                                                                        indexEpisode]
+                                                                    .name,
+                                                                thumbnail:
+                                                                    movieDetailController
+                                                                        .movieDetail
+                                                                        .value!
+                                                                        .thumbUrl,
+                                                                onTap: () {
+                                                                  if (movieDetailController
+                                                                      .isWebView
+                                                                      .value) {
+                                                                    movieDetailController.changeEpisode(movieDetailController
+                                                                        .movieDetail
+                                                                        .value!
+                                                                        .episodes[
+                                                                            index]
+                                                                        .serverData[
+                                                                            indexEpisode]
+                                                                        .linkEmbed);
+                                                                    return;
+                                                                  }
+                                                                  movieDetailController.changeEpisode(movieDetailController
+                                                                      .movieDetail
+                                                                      .value!
+                                                                      .episodes[
+                                                                          index]
+                                                                      .serverData[
+                                                                          indexEpisode]
+                                                                      .linkM3U8);
+                                                                },
+                                                              );
+                                                            },
+                                                          )
+                                                        ],
+                                                      );
+                                                    }
                                                   },
                                                 )
                                               ],
@@ -575,6 +639,84 @@ class MovieDetailScreen extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildServer({
+    required String text,
+    required VoidCallback onTap,
+    required bool isSelected,
+  }) {
+    return Expanded(
+      child: InkWell(
+        onTap: onTap,
+        child: Container(
+          alignment: Alignment.center,
+          padding: const EdgeInsets.symmetric(vertical: 5),
+          decoration: BoxDecoration(
+            color: isSelected ? Colors.amber : Colors.transparent,
+            borderRadius: BorderRadius.all(Radius.circular(5)),
+          ),
+          child: Text(
+            text,
+            maxLines: 2,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSource({
+    required String source,
+    required String text,
+  }) {
+    return Expanded(
+      child: InkWell(
+        onTap: () {
+          movieDetailController.setSource(source: source);
+        },
+        child: Obx(
+          () {
+            return Container(
+              alignment: Alignment.center,
+              padding: const EdgeInsets.symmetric(vertical: 5),
+              decoration: BoxDecoration(
+                color: movieDetailController.source.value == source
+                    ? Colors.amber
+                    : Colors.transparent,
+                borderRadius: BorderRadius.all(Radius.circular(5)),
+              ),
+              child: Text(text),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEpisodesGrid({
+    required BuildContext context,
+    required String name,
+    required VoidCallback onTap,
+    required bool isSelected,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      child: InkWell(
+        onTap: onTap,
+        child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.all(Radius.circular(5)),
+              color: isSelected
+                  ? Colors.black.withOpacity(0.2)
+                  : Colors.transparent,
+            ),
+            child: Text(
+              name,
+              style: Theme.of(context).textTheme.bodyLarge,
+            )),
       ),
     );
   }

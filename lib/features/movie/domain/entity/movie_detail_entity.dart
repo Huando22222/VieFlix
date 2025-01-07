@@ -5,7 +5,6 @@ class MovieDetailEntity extends FeatureMovieEntity {
   final String time;
   final String description;
   final String episodeTotal;
-  final String episodeCurrent;
   final String actor;
   final String director;
   final String quality;
@@ -20,7 +19,7 @@ class MovieDetailEntity extends FeatureMovieEntity {
     required this.time,
     required this.description,
     required this.episodeTotal,
-    required this.episodeCurrent,
+    required super.episodeCurrent,
     required this.actor,
     required this.director,
     required this.quality,

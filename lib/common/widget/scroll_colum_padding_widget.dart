@@ -35,7 +35,7 @@ class ScrollColumPaddingWidget extends StatelessWidget {
         right: paddingHorizontal ?? 10,
       ),
       child: Column(
-        mainAxisSize: MainAxisSize.max,
+        mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: crossAxisAlignment ?? CrossAxisAlignment.start,
         children: children,

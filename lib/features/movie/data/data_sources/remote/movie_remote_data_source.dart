@@ -16,8 +16,10 @@ abstract class MovieRemoteDataSource {
     required String source,
   });
 
-  Future<List<FeatureMovieModel>> getListSearchMovie(
-      {required String path, required int limit, required int page});
+  Future<List<FeatureMovieModel>> getListSearchMovie({
+    required String source,
+    required String key,
+  });
 }
 
 class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
@@ -84,15 +86,29 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
   }
 
   @override
-  Future<List<FeatureMovieModel>> getListSearchMovie(
-      {required String path, required int limit, required int page}) async {
-    final response = await http.get(Uri.parse(
-        '${Constants.baseUrlV1API}danh-sach/$path?page=$page&limit=$limit'));
+  Future<List<FeatureMovieModel>> getListSearchMovie({
+    required String source,
+    required String key,
+  }) async {
+    //https://phimapi.com/v1/api/tim-kiem?keyword={Từ khóa}
+    //https://phim.nguonc.com/api/films/search?keyword=${slug}
+    String endPoint = '';
+    if (source == 'KK') {
+      endPoint = 'https://phimapi.com/v1/api/tim-kiem?keyword=';
+    } else if (source == 'NC') {
+      endPoint = 'https://phim.nguonc.com/api/films/search?keyword=';
+    }
+    final response = await http.get(Uri.parse('$endPoint$key'));
     if (response.statusCode == 200) {
-      final items = jsonDecode(response.body)['data']['items'];
-
-      if (items is List) {
+      final items = jsonDecode(response.body)['items'];
+      if (items != null && items is List) {
         return items.map((json) => FeatureMovieModel.fromJson(json)).toList();
+      }
+      final itemsKKphim = jsonDecode(response.body)['data']['items'];
+      if (itemsKKphim != null && itemsKKphim is List) {
+        return itemsKKphim
+            .map((json) => FeatureMovieModel.fromJson(json))
+            .toList();
       }
       throw ClientException();
     } else {

@@ -1,48 +1,44 @@
 import 'package:get/get.dart';
+import 'package:showcaseview/showcaseview.dart';
 import 'package:vie_flix/features/movie/presentation/binding/search_movie_binding.dart';
 import 'package:vie_flix/features/user/presentation/binding/bottom_navigation_binding.dart';
-import 'package:vie_flix/features/user/presentation/binding/filter_binding.dart';
+import 'package:vie_flix/features/user/presentation/binding/favorite_binding.dart';
 import 'package:vie_flix/features/user/presentation/screen/home_screen.dart';
-import 'package:vie_flix/features/movie/presentation/binding/feature_movie_binding.dart';
+import 'package:vie_flix/features/movie/presentation/binding/dash_board_binding.dart';
 import 'package:vie_flix/features/movie/presentation/binding/more_movie_binding.dart';
 import 'package:vie_flix/features/movie/presentation/binding/movie_detail_binding.dart';
-import 'package:vie_flix/features/movie/presentation/screen/dash_board_screen.dart';
-import 'package:vie_flix/features/user/presentation/screen/on_boarding_page.dart';
 import 'package:vie_flix/config/routes/app_route.dart';
 import 'package:vie_flix/features/movie/presentation/screen/more_movie_screen.dart';
 import 'package:vie_flix/features/movie/presentation/screen/movie_detail_screen.dart';
+import 'package:vie_flix/features/user/presentation/screen/on_boarding_page.dart';
+import 'package:vie_flix/features/user/presentation/screen/policy_screen.dart';
 import 'package:vie_flix/features/user/presentation/screen/setting_screen.dart';
 
 class AppPage {
   static final routes = [
     GetPage(
       name: AppRoute.onBoardingScreen,
-      bindings: [
-        FilterBinding(),
-      ],
-      page: () => const OnBoardingPage(),
-    ),
-    GetPage(
-      name: AppRoute.dashboardScreen,
-      page: () => const DashBoardScreen(),
-      bindings: [
-        FeatureMovieBinding(),
-      ],
+      page: () => OnBoardingPage(),
     ),
     GetPage(
       name: AppRoute.detailMovieScreen,
-      page: () => MovieDetailScreen(),
+      page: () => ShowCaseWidget(
+        builder: (context) => MovieDetailScreen(),
+      ),
       bindings: [
         MovieDetailBinding(),
       ],
     ),
     GetPage(
       name: AppRoute.mainScreen,
-      page: () => const HomeScreen(),
+      page: () => ShowCaseWidget(
+        builder: (context) => HomeScreen(),
+      ),
       bindings: [
         BottomNavigationBinding(),
-        FeatureMovieBinding(),
-        SearchMovieBinding()
+        DashBoardBinding(),
+        FavoriteBinding(),
+        SearchMovieBinding(),
       ],
     ),
     GetPage(
@@ -55,7 +51,10 @@ class AppPage {
     GetPage(
       name: AppRoute.settingScreen,
       page: () => const SettingScreen(),
-      bindings: [],
+    ),
+    GetPage(
+      name: AppRoute.policyScreen,
+      page: () => const PolicyScreen(),
     ),
   ];
 }

@@ -7,12 +7,13 @@ import 'package:vie_flix/features/movie/domain/repository/movie/movie_repository
 class GetListSearchMovieUsecase {
   final MovieRepository _movieRepository = GetIt.instance<MovieRepository>();
 
-  Future<Either<Failure, List<FeatureMovieEntity>>> call(
-      {required String path, required int limit, required int page}) async {
+  Future<Either<Failure, List<FeatureMovieEntity>>> call({
+    required String source,
+    required String key,
+  }) async {
     return await _movieRepository.getListSearchMovie(
-      path: path,
-      limit: limit,
-      page: page,
+      source: source,
+      key: key,
     );
   }
 }

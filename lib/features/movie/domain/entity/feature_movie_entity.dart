@@ -8,6 +8,7 @@ class FeatureMovieEntity extends Equatable {
   final String originName;
   final String posterUrl;
   final String thumbUrl;
+  final String episodeCurrent;
 
   const FeatureMovieEntity({
     required this.source,
@@ -17,6 +18,7 @@ class FeatureMovieEntity extends Equatable {
     required this.originName,
     required this.posterUrl,
     required this.thumbUrl,
+    required this.episodeCurrent,
   });
 
   @override
@@ -28,5 +30,6 @@ class FeatureMovieEntity extends Equatable {
         originName,
         posterUrl,
         thumbUrl,
+        episodeCurrent,
       ];
 }

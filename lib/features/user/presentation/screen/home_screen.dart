@@ -1,20 +1,18 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:vie_flix/features/user/presentation/controller/app_setting_controller.dart';
 import 'package:vie_flix/features/user/presentation/controller/bottom_navigation_controller.dart';
-import 'package:vie_flix/features/user/presentation/controller/theme_controller.dart';
 import 'package:vie_flix/common/styles/app_color.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
-
+  HomeScreen({super.key});
+  final AppSettingController appSettingController =
+      Get.find<AppSettingController>();
   @override
   Widget build(BuildContext context) {
     final dv = MediaQuery.of(context);
     final BottomNavigationController bottomNavigationController =
         Get.find<BottomNavigationController>();
-    final ThemeController themeController = Get.find<ThemeController>();
     return Scaffold(
       extendBody: true,
       body: Obx(
@@ -39,7 +37,7 @@ class HomeScreen extends StatelessWidget {
                 //     : AppColor.lightBackground,
                 boxShadow: [
                   BoxShadow(
-                    color: (themeController.isDarkTheme.value
+                    color: (appSettingController.isDarkTheme.value
                             ? AppColor.darkPrimary
                             : AppColor.lightPrimary)
                         .withOpacity(0.1),
@@ -78,7 +76,6 @@ class HomeScreen extends StatelessWidget {
       required String name,
       required String pathIcon,
       required BuildContext context}) {
-    final ThemeController themeController = Get.find<ThemeController>();
     return Expanded(
       child: GestureDetector(
         onTap: onTap,
@@ -93,7 +90,7 @@ class HomeScreen extends StatelessWidget {
                 decoration: BoxDecoration(
                   shape: BoxShape.rectangle,
                   color: isSelected
-                      ? (themeController.isDarkTheme.value
+                      ? (appSettingController.isDarkTheme.value
                           ? AppColor.darkPrimary.withOpacity(0.3)
                           : AppColor.lightPrimary.withOpacity(0.2))
                       : Colors.transparent,
@@ -106,10 +103,10 @@ class HomeScreen extends StatelessWidget {
                   height: 25,
                   width: 25,
                   color: isSelected
-                      ? (themeController.isDarkTheme.value
+                      ? (appSettingController.isDarkTheme.value
                           ? AppColor.darkPrimary
                           : AppColor.lightPrimary)
-                      : (themeController.isDarkTheme.value
+                      : (appSettingController.isDarkTheme.value
                           ? AppColor.darkText.withOpacity(0.6)
                           : AppColor.lightText.withOpacity(0.6)),
                 ),

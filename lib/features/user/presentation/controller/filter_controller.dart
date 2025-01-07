@@ -1,17 +1,18 @@
 import 'dart:developer';
 
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:vie_flix/features/movie/domain/entity/category_entity.dart';
-import 'package:vie_flix/features/user/data/data_sources/local/database_data_source.dart';
+import 'package:vie_flix/features/user/data/data_sources/local/category_database_data_source.dart';
 
 class FilterController extends GetxController {
-  final dbSource = DatabaseDataSource.instance;
+  final CategoryDatabaseDataSource dbSource =
+      GetIt.instance<CategoryDatabaseDataSource>();
 
   RxList<CategoryEntity> fav = <CategoryEntity>[].obs;
 
   @override
   void onInit() {
-    // TODO: implement onInit
     super.onInit();
     _loadCategory();
   }
@@ -28,17 +29,10 @@ class FilterController extends GetxController {
   }
 
   void updateCategory() async {
-    log('fav length: ${fav.length}');
     for (var i = 0; i < fav.length; i++) {
       log(fav[i].slug);
     }
     await dbSource.updateMultipleCategories(fav.map((e) => e.slug).toList());
-  }
-
-  void test() async {
-    final categories = await dbSource.getSelectedCategories();
-    log('cate db: ${categories.length}');
-    categories.map((e) => log(e.slug)).toList();
   }
 
   void onSelectFavorite(CategoryEntity item) {

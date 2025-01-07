@@ -6,7 +6,7 @@ import 'package:vie_flix/features/movie/domain/entity/feature_movie_entity.dart'
 import 'package:vie_flix/features/movie/domain/usecase/movie/get_list_feature_movie_usecase.dart';
 import 'package:vie_flix/features/user/presentation/controller/filter_controller.dart';
 
-class FeatureMovieController extends GetxController {
+class DashBoardController extends GetxController {
   final GetListFeatureMovieUsecase getListFeatureMovieUsecase =
       GetIt.instance<GetListFeatureMovieUsecase>();
   final FilterController filterController = Get.find<FilterController>();

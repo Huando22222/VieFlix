@@ -40,6 +40,8 @@ dependencies:
   chewie: ^1.8.5
   webview_flutter: ^4.10.0
   video_player: ^2.9.2
+  flutter_slidable: ^3.1.2
+  showcaseview: ^3.0.0
   introduction_screen: ^3.1.14
   skeletonizer: ^1.4.2
   get_it: ^8.0.2

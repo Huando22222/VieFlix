@@ -24,15 +24,14 @@ class BuildListWiewCardWidget extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
           return CardWidget(
-              isShowTitle: false,
               data: CardEntity(
-                name: list[index].name,
-                originName: list[index].originName,
-                poster: list[index].poster,
-                thumbnail: list[index].thumbnail,
-                slug: list[index].slug,
-                source: list[index].source,
-              ));
+            name: list[index].name,
+            originName: list[index].originName,
+            poster: list[index].poster,
+            thumbnail: list[index].thumbnail,
+            slug: list[index].slug,
+            source: list[index].source,
+          ));
         },
         separatorBuilder: (context, index) {
           return const SizedBox(width: 5);

@@ -38,15 +38,13 @@ class MovieRepositoryImpl implements MovieRepository {
 
   @override
   Future<Either<Failure, List<FeatureMovieEntity>>> getListSearchMovie({
-    required String path,
-    required int limit,
-    required int page,
+    required String source,
+    required String key,
   }) async {
     try {
       final result = await movieRemoteDataSource.getListSearchMovie(
-        path: path,
-        limit: limit,
-        page: page,
+        source: source,
+        key: key,
       );
       return Right(result);
     } catch (e) {

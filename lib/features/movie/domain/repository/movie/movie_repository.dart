@@ -14,8 +14,7 @@ abstract class MovieRepository {
   });
 
   Future<Either<Failure, List<FeatureMovieEntity>>> getListSearchMovie({
-    required String path,
-    required int limit,
-    required int page,
+    required String source,
+    required String key,
   });
 }

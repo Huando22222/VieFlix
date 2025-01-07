@@ -5,36 +5,41 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:video_player/video_player.dart';
+import 'package:vie_flix/features/movie/domain/entity/favorite_entity.dart';
 import 'package:vie_flix/features/movie/domain/entity/movie_detail_entity.dart';
 import 'package:vie_flix/features/movie/domain/usecase/movie/get_movie_detail_usecase.dart';
+import 'package:vie_flix/features/user/presentation/controller/app_setting_controller.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class MovieDetailController extends GetxController {
   final GetMovieDetailUsecase getMovieDetailUsecase =
       GetIt.instance<GetMovieDetailUsecase>();
+  final AppSettingController appSettingController =
+      Get.find<AppSettingController>();
 
   late WebViewController webViewController;
   RxBool isWebView = false.obs;
-  var source = Get.arguments['source'];
+  var source = '${Get.arguments['source']}'.obs;
   var isLoading = false.obs;
   var isShowingDetail = false.obs;
   var isShowingThumbnail = true.obs;
   var movieDetail = Rx<MovieDetailEntity?>(null);
   var selectEpisode = ''.obs;
+  FavoriteEntity? favoriteMovie;
   @override
   void onInit() {
     super.onInit();
-    log('mv detail: $source');
-    fetchData(slug: Get.arguments['slug']);
+    log('mv detail: ${source.value}');
+    fetchData(slug: Get.arguments['slug'], source: source.value);
   }
 
   Future setSource({required String source}) async {
-    this.source = source;
-    fetchData(slug: Get.arguments['slug']);
+    fetchData(slug: Get.arguments['slug'], source: source);
   }
 
   Future fetchData({
     required String slug,
+    required String source,
   }) async {
     try {
       isLoading.value = true;
@@ -48,6 +53,14 @@ class MovieDetailController extends GetxController {
         },
         (r) {
           movieDetail.value = r;
+          favoriteMovie = FavoriteEntity(
+            slug: r.slug,
+            name: r.name,
+            originName: r.originName,
+            source: r.source,
+            imagePath: r.posterUrl,
+          );
+          this.source.value = source;
         },
       );
     } catch (e, stackTrace) {
@@ -101,7 +114,7 @@ class MovieDetailController extends GetxController {
       chewieController.value = ChewieController(
         videoPlayerController: _videoPlayerController!,
         aspectRatio: _videoPlayerController!.value.aspectRatio,
-        autoPlay: false,
+        autoPlay: appSettingController.isAutoPlayVideo.value,
         looping: false,
         allowFullScreen: true,
         allowMuting: true,

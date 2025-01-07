@@ -2,8 +2,12 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:vie_flix/common/styles/app_color.dart';
 import 'package:vie_flix/common/widget/Scroll_Colum_padding_widget.dart';
+import 'package:vie_flix/config/routes/app_route.dart';
+import 'package:vie_flix/core/constant/constants.dart';
 import 'package:vie_flix/features/movie/presentation/controller/search_movie_controller.dart';
+import 'package:vie_flix/features/movie/presentation/screen/widget/card_horiziontal_widget.dart';
 
 class SearchScreen extends StatelessWidget {
   const SearchScreen({super.key});
@@ -14,8 +18,9 @@ class SearchScreen extends StatelessWidget {
         OverlayPortalController();
     final LayerLink layerLink = LayerLink();
 
-    final SearchMovieController controller = Get.find<SearchMovieController>();
-    return ScrollColumPaddingWidget(
+    final SearchMovieController searchMovieController =
+        Get.find<SearchMovieController>();
+    return Column(
       children: [
         AppBar(
           actions: [
@@ -49,6 +54,8 @@ class SearchScreen extends StatelessWidget {
                     followerAnchor: Alignment.topRight,
                     offset: const Offset(0, 50),
                     child: Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                       decoration: const BoxDecoration(
                         color: Colors.red,
                         borderRadius: BorderRadius.only(
@@ -58,36 +65,43 @@ class SearchScreen extends StatelessWidget {
                           // bottomLeft: Radius.circular(8.0),
                         ),
                       ),
-                      height: 50,
-                      width: 200,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Checkbox(
+                                value: false,
+                                onChanged: (value) {},
+                              ),
+                              Text("KKphim"),
+                            ],
+                          ),
+                          Text("NguonC"),
+                          Text("Ophim"),
+                        ],
+                      ),
                     ),
                   ),
                 ],
               ),
             );
           },
-          // child: CompositedTransformTarget(
-          //   link: _layerLink,
-          //   child: IconButton(
-          //     onPressed: () {
-          //       _tooltipController.toggle();
-          //     },
-          //     icon: Icon(Icons.app_registration_rounded),
-          //   ),
-          // ),
         ),
         Obx(
           () => TextField(
-            controller: controller.textController,
-            focusNode: controller.focusNode,
-            onChanged: controller.onChanged,
+            controller: searchMovieController.textController,
+            focusNode: searchMovieController.focusNode,
+            onChanged: searchMovieController.onChanged,
             decoration: InputDecoration(
               hintText: 'Search...',
               prefixIcon: const Icon(Icons.search),
-              suffixIcon: controller.searchText.value.isNotEmpty
+              suffixIcon: searchMovieController.searchText.value.isNotEmpty
                   ? IconButton(
                       icon: const Icon(Icons.clear),
-                      onPressed: controller.clearSearch,
+                      onPressed: searchMovieController.clearSearch,
                     )
                   : null,
               border: const OutlineInputBorder(
@@ -113,16 +127,11 @@ class SearchScreen extends StatelessWidget {
             ),
           ),
         ),
-        ElevatedButton(
-          onPressed: () {
-            Drawer();
-          },
-          child: Text("Search"),
-        ),
         const SizedBox(height: 10),
         Obx(
           () {
-            if (controller.isFocused.value) {
+            if (searchMovieController.isFocused.value &&
+                searchMovieController.searchText.value.isEmpty) {
               return Wrap(
                 runSpacing: 10,
                 spacing: 10,
@@ -136,6 +145,35 @@ class SearchScreen extends StatelessWidget {
               );
             } else {
               return Container();
+            }
+          },
+        ),
+        Obx(
+          () {
+            if (searchMovieController.searchList.isNotEmpty) {
+              return Expanded(
+                child: ListView.separated(
+                  itemBuilder: (context, index) {
+                    final item = searchMovieController.searchList[index];
+                    return CardHoriziontalWidget(
+                      slug: item.slug,
+                      name: item.name,
+                      originName: item.originName,
+                      source: item.source,
+                      imagePath: item.source == "KK"
+                          ? "${Constants.baseUrlPoster}${item.posterUrl}"
+                          : item.posterUrl,
+                      episodeCurrent: item.episodeCurrent,
+                    );
+                  },
+                  separatorBuilder: (context, index) {
+                    return SizedBox.shrink();
+                  },
+                  itemCount: searchMovieController.searchList.length,
+                ),
+              );
+            } else {
+              return const SizedBox.shrink();
             }
           },
         )
