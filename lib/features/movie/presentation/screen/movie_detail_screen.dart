@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -23,19 +21,19 @@ class MovieDetailScreen extends StatefulWidget {
 class _MovieDetailScreenState extends State<MovieDetailScreen> {
   final MovieDetailController movieDetailController =
       Get.find<MovieDetailController>();
-
   final AppSettingController appSettingController =
       Get.find<AppSettingController>();
-
   final FavoriteController favoriteController = Get.find<FavoriteController>();
 
   final GlobalKey keySource = GlobalKey();
-
-  final GlobalKey keyTest = GlobalKey();
+  final GlobalKey keyChannel = GlobalKey();
+  final GlobalKey keyShowGrid = GlobalKey();
+  final GlobalKey keyAddFavorite = GlobalKey();
+  final GlobalKey keyRealeted = GlobalKey();
+  final GlobalKey keyMoreInfo = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
-    // final GlobalKey keySource = GlobalKey();
     final size = MediaQuery.of(context).size;
 
     return ScaffoldWidget(
@@ -45,10 +43,20 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
           if (movieDetailController.isLoading.value) {
             return const SkeletonMovieDetail();
           } else {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              ShowCaseWidget.of(context).startShowCase([keySource, keyTest]);
-              // Sau khi kích hoạt, đặt lại isTrigger để không lặp lại
-            });
+            if (appSettingController.isShowcaseTriggeredMovieDetail) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                ShowCaseWidget.of(context).startShowCase([
+                  keyChannel,
+                  keySource,
+                  keyShowGrid,
+                  keyAddFavorite,
+                  keyMoreInfo,
+                  keyRealeted,
+                ]);
+                appSettingController.isShowcaseTriggeredMovieDetail = false;
+              });
+            }
+
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -112,36 +120,44 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                Row(
-                  children: [
-                    Obx(
-                      () {
-                        return _buildServer(
-                            text: 'm3u8',
-                            onTap: () {
-                              movieDetailController.isWebView.value = false;
-                              movieDetailController.changeEpisode(
-                                  movieDetailController.movieDetail.value!
-                                      .episodes[0].serverData[0].linkM3U8);
-                            },
-                            isSelected: !movieDetailController.isWebView.value);
-                      },
-                    ),
-                    Obx(
-                      () {
-                        return _buildServer(
-                            text: 'webView',
-                            onTap: () {
-                              movieDetailController.isWebView.value = true;
-                              movieDetailController.changeEpisode(
-                                  movieDetailController.movieDetail.value!
-                                      .episodes[0].serverData[0].linkEmbed);
-                            },
-                            isSelected: movieDetailController.isWebView.value);
-                      },
-                    ),
-                    const Spacer(),
-                  ],
+                ShowCaseCustomeWidget(
+                  globalKey: keyChannel,
+                  title: "Channel",
+                  description:
+                      "Với KKphim, Ophim hoạt động tốt với m3u8 channel.\nNguonC bạn nên sử webView",
+                  child: Row(
+                    children: [
+                      Obx(
+                        () {
+                          return _buildServer(
+                              text: 'm3u8',
+                              onTap: () {
+                                movieDetailController.isWebView.value = false;
+                                movieDetailController.changeEpisode(
+                                    movieDetailController.movieDetail.value!
+                                        .episodes[0].serverData[0].linkM3U8);
+                              },
+                              isSelected:
+                                  !movieDetailController.isWebView.value);
+                        },
+                      ),
+                      Obx(
+                        () {
+                          return _buildServer(
+                              text: 'webView',
+                              onTap: () {
+                                movieDetailController.isWebView.value = true;
+                                movieDetailController.changeEpisode(
+                                    movieDetailController.movieDetail.value!
+                                        .episodes[0].serverData[0].linkEmbed);
+                              },
+                              isSelected:
+                                  movieDetailController.isWebView.value);
+                        },
+                      ),
+                      const Spacer(),
+                    ],
+                  ),
                 ),
                 const SizedBox(
                   height: 10,
@@ -159,73 +175,62 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
                     ],
                   ),
                 ),
-                ShowCaseCustomeWidget(
-                  globalKey: keyTest,
-                  title: "Test",
-                  description: "This is a test showcase",
-                  child: Text("Showcase Target"),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    ShowCaseWidget.of(context).startShowCase([keyTest]);
-                  },
-                  child: Text("Trigger Showcase"),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    ShowCaseWidget.of(context).startShowCase([keySource]);
-                    log('message');
-                  },
-                  child: Text("trigger"),
-                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Obx(
-                      () {
-                        return IconButton(
-                          onPressed: () {
-                            appSettingController.changeShowGridEpisodes();
-                          },
-                          icon: Icon(
-                            appSettingController.isShowGridEpisodes.value
-                                ? Icons.grid_view
-                                : Icons.menu,
-                          ),
-                        );
-                      },
+                    ShowCaseCustomeWidget(
+                      globalKey: keyShowGrid,
+                      title: "Danh sách tập",
+                      description: "lựa chọn hiển thị danh sách tập",
+                      child: IconButton(
+                        onPressed: () {
+                          appSettingController.changeShowGridEpisodes();
+                        },
+                        icon: Icon(
+                          appSettingController.isShowGridEpisodes.value
+                              ? Icons.grid_view
+                              : Icons.menu,
+                        ),
+                      ),
                     ),
-                    Obx(
-                      () {
-                        return IconButton(
-                          onPressed: () {
-                            if (favoriteController.isLoading.value) {
-                              return;
-                            }
-                            favoriteController.addOrRemoveFavorite(
-                                movieDetailController.favoriteMovie!);
-                          },
-                          icon: Icon(
-                            favoriteController.favorites.contains(
-                                    movieDetailController.favoriteMovie!)
-                                ? Icons.favorite
-                                : Icons.favorite_border,
-                          ),
-                        );
-                      },
+                    ShowCaseCustomeWidget(
+                      globalKey: keyAddFavorite,
+                      title: "Favorite",
+                      description: "Thêm vào xem sau",
+                      child: IconButton(
+                        onPressed: () {
+                          if (favoriteController.isLoading.value) {
+                            return;
+                          }
+                          favoriteController.addOrRemoveFavorite(
+                              movieDetailController.favoriteMovie!);
+                        },
+                        icon: Icon(
+                          favoriteController.favorites.contains(
+                                  movieDetailController.favoriteMovie!)
+                              ? Icons.favorite
+                              : Icons.favorite_border,
+                        ),
+                      ),
                     ),
                     const Spacer(),
-                    IconButton(
-                      onPressed: () {
-                        movieDetailController.isShowingDetail.value =
-                            !movieDetailController.isShowingDetail.value;
-                      },
-                      icon: Icon(
-                        movieDetailController.isShowingDetail.value
-                            ? Icons.keyboard_arrow_up_rounded
-                            : Icons.keyboard_arrow_down_rounded,
-                        color: Theme.of(context).colorScheme.secondary,
+                    ShowCaseCustomeWidget(
+                      globalKey: keyMoreInfo,
+                      title: "Chi tiết phim",
+                      description:
+                          "Bạn có thể xem chi tiết diễn viên, thời lượng, tập, ... ở đây",
+                      child: IconButton(
+                        onPressed: () {
+                          movieDetailController.isShowingDetail.value =
+                              !movieDetailController.isShowingDetail.value;
+                        },
+                        icon: Icon(
+                          movieDetailController.isShowingDetail.value
+                              ? Icons.keyboard_arrow_up_rounded
+                              : Icons.keyboard_arrow_down_rounded,
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
                       ),
                     ),
                   ],
@@ -375,23 +380,29 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
                                 1,
                             child: Column(
                               children: [
-                                TabBar(
-                                  dividerColor: Colors.transparent,
-                                  tabs: [
-                                    ...List.generate(
-                                      movieDetailController
-                                          .movieDetail.value!.episodes.length,
-                                      (index) {
-                                        return Tab(
-                                            text: movieDetailController
-                                                .movieDetail
-                                                .value!
-                                                .episodes[index]
-                                                .serverName);
-                                      },
-                                    ),
-                                    const Tab(text: 'liên quan'),
-                                  ],
+                                ShowCaseCustomeWidget(
+                                  globalKey: keyRealeted,
+                                  title: "Server và Liên quan",
+                                  description:
+                                      "Server VietSub và lồng tiếng và các phần phim liên quan ",
+                                  child: TabBar(
+                                    dividerColor: Colors.transparent,
+                                    tabs: [
+                                      ...List.generate(
+                                        movieDetailController
+                                            .movieDetail.value!.episodes.length,
+                                        (index) {
+                                          return Tab(
+                                              text: movieDetailController
+                                                  .movieDetail
+                                                  .value!
+                                                  .episodes[index]
+                                                  .serverName);
+                                        },
+                                      ),
+                                      const Tab(text: 'liên quan'),
+                                    ],
+                                  ),
                                 ),
                                 Expanded(
                                   child: TabBarView(

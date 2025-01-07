@@ -7,6 +7,9 @@ import 'package:vie_flix/features/movie/domain/usecase/movie/get_list_feature_mo
 import 'package:vie_flix/features/user/presentation/controller/filter_controller.dart';
 
 class DashBoardController extends GetxController {
+  bool isLoading = false;
+  RxBool isAddingFavorites = false.obs;
+
   final GetListFeatureMovieUsecase getListFeatureMovieUsecase =
       GetIt.instance<GetListFeatureMovieUsecase>();
   final FilterController filterController = Get.find<FilterController>();
@@ -31,8 +34,9 @@ class DashBoardController extends GetxController {
   List<CategoryEntity> favName = [];
 
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
+    isLoading = true;
     fetchData(
       link: 'https://phimapi.com/danh-sach/phim-moi-cap-nhat?page=1',
       list: latestMoviesKKPhim,
@@ -58,7 +62,11 @@ class DashBoardController extends GetxController {
       list: tvShowsKKPhim,
       isloading: isLoadingTvShowsKKPhim,
     );
+    isAddingFavorites.value = true;
+    await filterController.categoriesLoaded.future;
     loadFavoriteList();
+    isAddingFavorites.value = false;
+    isLoading = false;
   }
 
   void loadFavoriteList() async {
@@ -71,7 +79,7 @@ class DashBoardController extends GetxController {
       movieFavListsNC.add(RxList<FeatureMovieEntity>([]));
       isloadingFavStatesNC.add(false.obs);
     }
-
+    log("categories dboard: ${filterController.fav.length}");
     for (int i = 0; i < filterController.fav.length; i++) {
       await fetchData(
         link:

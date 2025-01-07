@@ -9,28 +9,29 @@ import 'package:vie_flix/features/movie/presentation/controller/dash_board_contr
 import 'package:vie_flix/features/movie/presentation/screen/widget/build_list_view_card_widget.dart';
 import 'package:vie_flix/features/movie/presentation/screen/widget/build_title_widget.dart';
 import 'package:vie_flix/features/movie/presentation/screen/widget/carouse_widget.dart';
+import 'package:vie_flix/features/user/presentation/controller/app_setting_controller.dart';
 
 class DashBoardScreen extends StatelessWidget {
   const DashBoardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final GlobalKey key1 = GlobalKey();
-    final DashBoardController dashBoardController = Get.find();
+    final GlobalKey keyCard = GlobalKey();
+
+    final DashBoardController dashBoardController =
+        Get.find<DashBoardController>();
+    final AppSettingController appSettingController =
+        Get.find<AppSettingController>();
+
     final size = MediaQuery.of(context).size;
 
     return ScrollColumPaddingWidget(
       children: [
         Align(
           alignment: Alignment.center,
-          child: ShowCaseCustomeWidget(
-            globalKey: key1,
-            title: "title",
-            description: "description",
-            child: Text(
-              'VieFlix',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
+          child: Text(
+            'VieFlix',
+            style: Theme.of(context).textTheme.headlineMedium,
           ),
         ),
         SizedBox(
@@ -38,6 +39,17 @@ class DashBoardScreen extends StatelessWidget {
           width: double.infinity,
           child: Obx(
             () {
+              if (!dashBoardController.isLoading) {
+                if (appSettingController.isShowcaseTriggeredDashboard) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    ShowCaseWidget.of(context).startShowCase([
+                      keyCard,
+                    ]);
+                    appSettingController.isShowcaseTriggeredDashboard = false;
+                    appSettingController.changeShowcaseTriggered(value: false);
+                  });
+                }
+              }
               return CarouseWidget(
                 data: dashBoardController.latestMoviesKKPhim.value
                     .map((e) => CardEntity(
@@ -53,59 +65,6 @@ class DashBoardScreen extends StatelessWidget {
             },
           ),
         ),
-        ...List.generate(
-          dashBoardController.movieFavListsNC.length,
-          (index) {
-            return Column(
-              children: [
-                const SizedBox(
-                  height: 20,
-                ),
-                BuildTitleWidget(
-                  title: dashBoardController.favName[index].name,
-                  onTap: () {
-                    Get.toNamed(
-                      AppRoute.moreMovieScreen,
-                      arguments: {
-                        'type': dashBoardController.favName[index].slug
-                      },
-                    );
-                  },
-                ),
-                SizedBox(
-                  height: size.height * 0.3,
-                  child: Obx(
-                    () {
-                      return BuildListWiewCardWidget(
-                        isLoading: dashBoardController
-                            .isloadingFavStatesNC[index].value,
-                        list: dashBoardController.movieFavListsNC[index].value
-                            .map((e) => CardEntity(
-                                  name: e.name,
-                                  originName: e.originName,
-                                  poster: e.thumbUrl,
-                                  thumbnail: e.thumbUrl,
-                                  slug: e.slug,
-                                  source: e.source,
-                                ))
-                            .toList(),
-                      );
-                    },
-                  ),
-                ),
-              ],
-            );
-          },
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        ElevatedButton(
-          onPressed: () {
-            ShowCaseWidget.of(context).startShowCase([key1]);
-          },
-          child: Text("trigger"),
-        ),
         BuildTitleWidget(
           title: 'Phim mới cập nhật',
           onTap: () {
@@ -119,22 +78,89 @@ class DashBoardScreen extends StatelessWidget {
           height: size.height * 0.3,
           child: Obx(
             () {
-              return BuildListWiewCardWidget(
-                isLoading:
-                    dashBoardController.isLoadingLatestMoviesKKPhim.value,
-                list: dashBoardController.latestMoviesKKPhim.value
-                    .map((e) => CardEntity(
-                          name: e.name,
-                          originName: e.originName,
-                          poster: e.posterUrl,
-                          thumbnail: e.thumbUrl,
-                          slug: e.slug,
-                          source: e.source,
-                        ))
-                    .toList(),
+              return ShowCaseCustomeWidget(
+                globalKey: keyCard,
+                title: "Thể loại",
+                description:
+                    "Danh sách phim bạn đã thêm vào trước đó.\nThẻ xanh là nguồn KKphim\nThẻ cam là NguonC",
+                child: BuildListWiewCardWidget(
+                  isLoading:
+                      dashBoardController.isLoadingLatestMoviesKKPhim.value,
+                  list: dashBoardController.latestMoviesKKPhim.value
+                      .map((e) => CardEntity(
+                            name: e.name,
+                            originName: e.originName,
+                            poster: e.posterUrl,
+                            thumbnail: e.thumbUrl,
+                            slug: e.slug,
+                            source: e.source,
+                          ))
+                      .toList(),
+                ),
               );
             },
           ),
+        ),
+        Obx(
+          () {
+            if (dashBoardController.isAddingFavorites.value) {
+              return const SizedBox.shrink();
+            } else {
+              return Column(
+                children: [
+                  ...List.generate(
+                    dashBoardController.movieFavListsNC.length,
+                    (index) {
+                      return Column(
+                        children: [
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          BuildTitleWidget(
+                            title: dashBoardController.favName[index].name,
+                            onTap: () {
+                              Get.toNamed(
+                                AppRoute.moreMovieScreen,
+                                arguments: {
+                                  'type':
+                                      dashBoardController.favName[index].slug
+                                },
+                              );
+                            },
+                          ),
+                          SizedBox(
+                            height: size.height * 0.3,
+                            child: Obx(
+                              () {
+                                return BuildListWiewCardWidget(
+                                  isLoading: dashBoardController
+                                      .isloadingFavStatesNC[index].value,
+                                  list: dashBoardController
+                                      .movieFavListsNC[index].value
+                                      .map((e) => CardEntity(
+                                            name: e.name,
+                                            originName: e.originName,
+                                            poster: e.thumbUrl,
+                                            thumbnail: e.thumbUrl,
+                                            slug: e.slug,
+                                            source: e.source,
+                                          ))
+                                      .toList(),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  )
+                ],
+              );
+            }
+          },
+        ),
+        const SizedBox(
+          height: 20,
         ),
         const SizedBox(
           height: 20,

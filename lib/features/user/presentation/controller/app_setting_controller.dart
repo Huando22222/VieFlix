@@ -15,11 +15,13 @@ class AppSettingController extends GetxController {
   RxBool isShowTitleMovie = false.obs;
   RxBool isDarkTheme = false.obs;
 
+  bool isShowcaseTriggeredMovieDetail = false;
+  bool isShowcaseTriggeredDashboard = false;
+
   @override
   void onInit() {
     super.onInit();
     // loadSettings();
-
     Get.put(FilterController());
   }
 
@@ -27,15 +29,23 @@ class AppSettingController extends GetxController {
     isLoadingSetting.value = true;
     final prefs = await SharedPreferences.getInstance();
 
+    bool isShowcaseTriggered = prefs.getBool('isShowcaseTriggered') ?? true;
+    isShowcaseTriggeredMovieDetail = isShowcaseTriggered;
+    isShowcaseTriggeredDashboard = isShowcaseTriggered;
+    //
     isShowIntro.value = prefs.getBool('isShowIntro') ?? true;
-    log(prefs.getBool('isShowIntro').toString());
-    isDarkTheme.value = prefs.getBool('isDarkTheme') ?? false;
+    isDarkTheme.value = prefs.getBool('isDarkTheme') ?? true;
     Get.changeTheme(isDarkTheme.value ? AppTheme.dark : AppTheme.light);
     isExpandedSetting.value = prefs.getBool('isExpandedSetting') ?? false;
     isAutoPlayVideo.value = prefs.getBool('isAutoPlayVideo') ?? false;
     isShowTitleMovie.value = prefs.getBool('isShowTitleMovie') ?? false;
     isShowGridEpisodes.value = prefs.getBool('isShowGridEpisodes') ?? true;
     isLoadingSetting.value = false;
+  }
+
+  void changeShowcaseTriggered({required bool value}) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isShowcaseTriggered', value);
   }
 
   void changeTheme() async {
