@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:vie_flix/features/user/presentation/controller/app_setting_controller.dart';
 import 'package:vie_flix/common/styles/app_theme.dart';
@@ -15,6 +16,7 @@ void main() async {
   final appSettingController = Get.put(AppSettingController());
   await appSettingController.loadSettings();
 
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   final initialRoute = appSettingController.isShowIntro.value
       ? AppRoute.onBoardingScreen
       : AppRoute.mainScreen;

@@ -25,11 +25,10 @@ class MovieDetailModel extends MovieDetailEntity {
     required super.thumbUrl,
   });
 
-  factory MovieDetailModel.fromJson(
-    Map<String, dynamic> json,
-  ) {
+  factory MovieDetailModel.fromJson(Map<String, dynamic> json, String source) {
     return MovieDetailModel(
-      source: json["episodes"] != null ? "KK" : "NC",
+      source: source,
+      // source: json["episodes"] != null ? "KK" : "NC",
       modified: json["movie"]["modified"] is String
           ? DateTime.parse(json["movie"]["modified"])
           : DateTime.parse(json["movie"]["modified"]["time"]),

@@ -22,7 +22,7 @@ class CarouseWidget extends StatelessWidget {
         aspectRatio: 2.0,
         enlargeCenterPage: true,
         autoPlayInterval: const Duration(seconds: 10),
-        scrollDirection: Axis.vertical,
+        scrollDirection: Axis.horizontal,
       ),
       items: List.generate(
         data.length,
@@ -36,15 +36,14 @@ class CarouseWidget extends StatelessWidget {
                   InkWell(
                     onTap: () {
                       Get.toNamed(
-                        AppRoute.detailMovieScreen,
+                        '${AppRoute.detailMovieScreen}/${data[index].slug}',
                         arguments: {
-                          'slug': data[index].slug,
                           'source': data[index].source,
                         },
                       );
                     },
                     child: Image.network(
-                      data[index].poster,
+                      data[index].thumbnail,
                       fit: BoxFit.cover,
                       width: 1000.0,
                     ),

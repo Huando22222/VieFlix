@@ -31,7 +31,6 @@ class SearchMovieController extends GetxController {
         searchText.value = value;
         if (_debounce?.isActive ?? false) _debounce?.cancel();
         _debounce = Timer(const Duration(milliseconds: 1500), () {
-          log("Searching for: $value");
           _getListSearch(value);
         });
       };

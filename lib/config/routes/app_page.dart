@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:showcaseview/showcaseview.dart';
 import 'package:vie_flix/features/movie/presentation/binding/search_movie_binding.dart';
+import 'package:vie_flix/features/movie/presentation/controller/movie_detail_controller.dart';
 import 'package:vie_flix/features/user/presentation/binding/bottom_navigation_binding.dart';
 import 'package:vie_flix/features/user/presentation/binding/favorite_binding.dart';
 import 'package:vie_flix/features/user/presentation/screen/home_screen.dart';
@@ -21,13 +22,16 @@ class AppPage {
       page: () => OnBoardingPage(),
     ),
     GetPage(
-      name: AppRoute.detailMovieScreen,
+      name: '${AppRoute.detailMovieScreen}/:slug',
       page: () => ShowCaseWidget(
-        builder: (context) => MovieDetailScreen(),
+        builder: (context) => const MovieDetailScreen(),
       ),
-      bindings: [
-        MovieDetailBinding(),
-      ],
+      // bindings: [
+      //   MovieDetailBinding(),
+      // ],
+      binding: BindingsBuilder(() {
+        Get.create(() => MovieDetailController());
+      }),
     ),
     GetPage(
       name: AppRoute.mainScreen,

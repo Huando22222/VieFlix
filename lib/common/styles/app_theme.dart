@@ -5,7 +5,11 @@ import 'package:vie_flix/common/styles/app_text.dart';
 class AppTheme {
   static ThemeData light = ThemeData(
     useMaterial3: true,
-    appBarTheme: const AppBarTheme(color: Colors.transparent),
+    appBarTheme: AppBarTheme(
+      color: Colors.transparent,
+      titleTextStyle:
+          AppText.headlineMedium.copyWith(color: AppColor.lightPrimary),
+    ),
     colorScheme: const ColorScheme.light(
         surface: AppColor.lightBackground,
         primary: AppColor.lightPrimary,
@@ -28,7 +32,11 @@ class AppTheme {
 
   static ThemeData dark = ThemeData(
     useMaterial3: true,
-    appBarTheme: const AppBarTheme(color: Colors.transparent),
+    appBarTheme: AppBarTheme(
+      color: Colors.transparent,
+      titleTextStyle:
+          AppText.headlineMedium.copyWith(color: AppColor.darkPrimary),
+    ),
     colorScheme: const ColorScheme.dark(
       surface: AppColor.darkBackground,
       primary: AppColor.darkPrimary,

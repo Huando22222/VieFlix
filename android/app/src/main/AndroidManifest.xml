@@ -5,9 +5,9 @@
         
         android:usesCleartextTraffic="true"
         
-        android:label="vie_flix"
+        android:label="Vie Flix"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
             android:exported="true"

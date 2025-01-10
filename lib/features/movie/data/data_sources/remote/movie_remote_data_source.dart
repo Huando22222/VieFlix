@@ -62,7 +62,7 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
         endPoint = 'https://phimapi.com/phim/';
       } else if (source == 'NC') {
         endPoint = 'https://phim.nguonc.com/api/film/';
-      } else {
+      } else if (source == 'OP') {
         endPoint = 'https://ophim1.com/phim/';
       }
 
@@ -73,7 +73,7 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
         log("1");
         if (data != null) {
           log("2");
-          return MovieDetailModel.fromJson(data);
+          return MovieDetailModel.fromJson(data, source);
         }
         throw ClientException();
       } else {

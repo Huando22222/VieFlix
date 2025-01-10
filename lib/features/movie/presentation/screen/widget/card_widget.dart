@@ -41,9 +41,8 @@ class CardWidget extends StatelessWidget {
       child: GestureDetector(
         onTap: () {
           Get.toNamed(
-            AppRoute.detailMovieScreen,
+            '${AppRoute.detailMovieScreen}/${data.slug}',
             arguments: {
-              'slug': data.slug,
               'source': data.source,
             },
           );

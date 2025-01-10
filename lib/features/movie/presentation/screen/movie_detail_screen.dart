@@ -4,6 +4,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:showcaseview/showcaseview.dart';
 import 'package:vie_flix/common/widget/show_case_custome_widget.dart';
+import 'package:vie_flix/core/constant/constants.dart';
+import 'package:vie_flix/features/movie/presentation/screen/widget/card_horiziontal_widget.dart';
 import 'package:vie_flix/features/user/presentation/controller/app_setting_controller.dart';
 import 'package:vie_flix/features/user/presentation/controller/favorite_controller.dart';
 import 'package:vie_flix/features/user/presentation/screen/skeleton_movie_detail.dart';
@@ -81,7 +83,12 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
                             child: Stack(
                               children: [
                                 Image.network(movieDetailController
-                                    .movieDetail.value!.thumbUrl),
+                                            .movieDetail.value!.source ==
+                                        "KK"
+                                    ? movieDetailController
+                                        .movieDetail.value!.thumbUrl
+                                    : movieDetailController
+                                        .movieDetail.value!.posterUrl),
                                 Center(
                                   child: Icon(
                                     Icons.play_circle_sharp,
@@ -574,7 +581,31 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
                                       SingleChildScrollView(
                                         child: Column(
                                           children: [
-                                            // _buildEpisodes(context: context),
+                                            ListView.separated(
+                                              shrinkWrap: true,
+                                              physics:
+                                                  const NeverScrollableScrollPhysics(),
+                                              itemBuilder: (context, index) {
+                                                return Container();
+                                              },
+                                              separatorBuilder:
+                                                  (context, index) {
+                                                final item =
+                                                    movieDetailController
+                                                        .relatedList[index];
+                                                return CardHoriziontalWidget(
+                                                  slug: item.slug,
+                                                  name: item.name,
+                                                  originName: item.originName,
+                                                  source: item.source,
+                                                  imagePath: item.source == "KK"
+                                                      ? "${Constants.baseUrlPoster}${item.posterUrl}"
+                                                      : item.posterUrl,
+                                                );
+                                              },
+                                              itemCount: movieDetailController
+                                                  .relatedList.length,
+                                            ),
                                           ],
                                         ),
                                       ),
@@ -667,7 +698,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
           padding: const EdgeInsets.symmetric(vertical: 5),
           decoration: BoxDecoration(
             color: isSelected ? Colors.amber : Colors.transparent,
-            borderRadius: BorderRadius.all(Radius.circular(5)),
+            borderRadius: const BorderRadius.all(Radius.circular(5)),
           ),
           child: Text(
             text,
@@ -696,7 +727,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
                 color: movieDetailController.source.value == source
                     ? Colors.amber
                     : Colors.transparent,
-                borderRadius: BorderRadius.all(Radius.circular(5)),
+                borderRadius: const BorderRadius.all(Radius.circular(5)),
               ),
               child: Text(text),
             );

@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -26,17 +28,18 @@ class CardHoriziontalWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        log(slug);
         Get.toNamed(
-          AppRoute.detailMovieScreen,
+          '${AppRoute.detailMovieScreen}/$slug',
           arguments: {
-            'slug': slug,
             'source': source,
+            'key': UniqueKey(),
           },
         );
       },
       child: Container(
         margin: const EdgeInsets.all(10),
-        height: 100,
+        height: MediaQuery.of(context).size.height * 0.13,
         alignment: Alignment.bottomRight,
         decoration: BoxDecoration(
           color: source == "KK" ? AppColor.kkphim : AppColor.nguonC,
@@ -44,9 +47,8 @@ class CardHoriziontalWidget extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(
-              height: 100,
-              width: 150,
+            AspectRatio(
+              aspectRatio: 16 / 9,
               child: Image.network(
                 imagePath,
                 fit: BoxFit.cover,
@@ -69,9 +71,10 @@ class CardHoriziontalWidget extends StatelessWidget {
                 children: [
                   Text(
                     originName,
-                    maxLines: 1,
+                    maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
+                  const Divider(),
                   Text(
                     name,
                     maxLines: 1,
