@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vie_flix/config/routes/app_route.dart';
 import 'package:vie_flix/features/movie/domain/entity/card_entity.dart';
+import 'package:vie_flix/features/user/presentation/controller/app_setting_controller.dart';
 
 class CarouseWidget extends StatelessWidget {
   final List<CardEntity> data;
@@ -16,6 +17,8 @@ class CarouseWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppSettingController appSettingController =
+        Get.find<AppSettingController>();
     return CarouselSlider(
       options: CarouselOptions(
         autoPlay: true,
@@ -65,18 +68,27 @@ class CarouseWidget extends StatelessWidget {
                       ),
                       padding: const EdgeInsets.symmetric(
                           vertical: 10.0, horizontal: 20.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            data[index].name,
-                            style: Theme.of(context).textTheme.titleMedium,
-                          ),
-                          Text(
-                            data[index].originName,
-                            style: Theme.of(context).textTheme.titleSmall,
-                          ),
-                        ],
+                      child: Obx(
+                        () {
+                          if (appSettingController.isShowTitleMovie.value) {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  data[index].name,
+                                  style:
+                                      Theme.of(context).textTheme.titleMedium,
+                                ),
+                                Text(
+                                  data[index].originName,
+                                  style: Theme.of(context).textTheme.titleSmall,
+                                ),
+                              ],
+                            );
+                          } else {
+                            return SizedBox.shrink();
+                          }
+                        },
                       ),
                     ),
                   ),

@@ -31,7 +31,7 @@ class DashBoardScreen extends StatelessWidget {
           alignment: Alignment.center,
           child: Text(
             'VieFlix',
-            style: Theme.of(context).textTheme.headlineMedium,
+            style: Theme.of(context).textTheme.headlineLarge,
           ),
         ),
         SizedBox(

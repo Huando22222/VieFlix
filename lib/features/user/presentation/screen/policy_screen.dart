@@ -120,15 +120,12 @@ class PolicyScreen extends StatelessWidget {
                 style: TextStyle(color: Colors.black, fontSize: 16),
                 children: [
                   TextSpan(
-                    text: "Nếu có thắc mắc hay góp ý xin liên hệ với tôi \nFB:",
+                    text: "Nếu có thắc mắc hoặc góp ý xin liên hệ \nGmail:",
                   ),
                   TextSpan(
-                    text: " Huan.do22222",
+                    text: " Huando.work@gmail.com",
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  // TextSpan(
-                  //   text: " mọi góp ý của bạn sẽ rất có ích trong việc p.",
-                  // ),
                 ],
               ),
             ),

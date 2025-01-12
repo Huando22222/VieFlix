@@ -66,9 +66,9 @@ class OnBoardingPage extends StatelessWidget {
       ),
       pages: [
         PageViewModel(
-          title: "Vie\nFlix",
-          body: "Kho phim khổng lồ, đa dạng thể loại, cập nhật liên tục.",
-          image: _buildImage('img1.jpg'),
+          title: "Kho phim khổng lồ, đa dạng thể loại, cập nhật liên tục.",
+          body: " ",
+          image: _buildImage('Vie.png'),
           decoration: pageDecoration.copyWith(
             contentMargin: const EdgeInsets.symmetric(horizontal: 16),
             titleTextStyle: Theme.of(context).textTheme.headlineMedium,

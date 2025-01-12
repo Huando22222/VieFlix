@@ -25,14 +25,14 @@ class AppText {
     fontWeight: FontWeight.w500,
   );
 
-  static TextStyle bodyMedium = TextStyle(
-    fontSize: 14 * _textScale,
-    fontWeight: FontWeight.w400,
-  );
-
   static TextStyle bodyLarge = TextStyle(
     fontSize: 16 * _textScale,
     fontWeight: FontWeight.w500,
+  );
+
+  static TextStyle bodyMedium = TextStyle(
+    fontSize: 14 * _textScale,
+    fontWeight: FontWeight.w400,
   );
 
   static TextStyle bodySmall = TextStyle(

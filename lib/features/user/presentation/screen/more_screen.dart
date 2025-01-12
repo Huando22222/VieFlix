@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vie_flix/config/routes/app_route.dart';
@@ -17,10 +15,12 @@ class MoreScreen extends StatelessWidget {
       child: ScrollColumPaddingWidget(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(
-            "Vie\nFlix",
-            style: Theme.of(context).textTheme.headlineLarge,
+          Image.asset(
+            'assets/images/Vie.png',
+            fit: BoxFit.cover,
+            height: MediaQuery.of(context).size.height * 0.15,
           ),
+
           // _buildSession(
           //   name: 'Ứng dụng',
           //   children: [

@@ -1,4 +1,4 @@
-package com.example.vie_flix
+package com.huando.vie_flix
 
 import io.flutter.embedding.android.FlutterActivity
 
