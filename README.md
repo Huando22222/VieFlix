@@ -1,20 +1,12 @@
 
 # vie_flix
 
-A new Flutter project.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![Screenshot_1736793558](https://github.com/user-attachments/assets/9f1bea4b-c466-4ce9-94ac-8a25628e414e)
+![main_demo](https://github.com/user-attachments/assets/a7a28d9a-e222-4869-b13d-52c06c5f9d90)
+![Screenshot_1736796354](https://github.com/user-attachments/assets/e5ad26e3-7e03-449f-8dd9-d68dd6130ab2)
 
 ## feature:
 - login option 
