@@ -1,8 +1,6 @@
 
 # vie_flix
 
-
-## Getting Started
 <div style="display: flex; justify-content: space-between;">
     <img src="https://github.com/user-attachments/assets/a7a28d9a-e222-4869-b13d-52c06c5f9d90" alt="main_demo" width="32%" />
     <img src="https://github.com/user-attachments/assets/e5ad26e3-7e03-449f-8dd9-d68dd6130ab2" alt="Screenshot_1736796354" width="32%" />
@@ -12,15 +10,15 @@
 ## feature:
 - login option 
 - options [nguonc,kkphim]
-- search compilation mixing options [nguonc,kkphim]
+- search compilation mixing options [nguonc,kkphim ,ophim]
 - turn off light,
 - add favorites,
 - add category,
 - save progress,
-- change theme [in cache]()
+- change theme
 - search 
 - history search
 - filter movie
 - Feedback
-- copyright , policy [source Api belong to kkphim](https://www.kkphim.vip/)
+- copyright , policy
 
