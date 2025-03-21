@@ -4,8 +4,10 @@
 <dict>
 	<!-- NSAppTransportSecurity video_player -->
 	<key>NSAppTransportSecurity</key>
-	<key>NSAllowsArbitraryLoads</key>
-	<true/>
+    <dict>
+        <key>NSAllowsArbitraryLoads</key>
+        <true/>
+    </dict>
 	<!--  -->
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>

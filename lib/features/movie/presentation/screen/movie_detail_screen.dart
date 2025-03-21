@@ -226,7 +226,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
                       globalKey: keyMoreInfo,
                       title: "Chi tiết phim",
                       description:
-                          "Bạn có thể xem chi tiết diễn viên, thời lượng, tập, ... ở đây",
+                          "Bạn có thể xem chi tiết diễn viên, thời lượng, tập, ... ",
                       child: IconButton(
                         onPressed: () {
                           movieDetailController.isShowingDetail.value =

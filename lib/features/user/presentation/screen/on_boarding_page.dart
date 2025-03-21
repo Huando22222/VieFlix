@@ -66,10 +66,12 @@ class OnBoardingPage extends StatelessWidget {
       ),
       pages: [
         PageViewModel(
-          title: "Kho phim khổng lồ, đa dạng thể loại, cập nhật liên tục.",
+          title: "",
           body: " ",
           image: _buildImage('Vie.png'),
           decoration: pageDecoration.copyWith(
+            imageFlex: 2,
+            bodyFlex: 1,
             contentMargin: const EdgeInsets.symmetric(horizontal: 16),
             titleTextStyle: Theme.of(context).textTheme.headlineMedium,
             bodyTextStyle: Theme.of(context).textTheme.headlineMedium,
@@ -136,6 +138,9 @@ class OnBoardingPage extends StatelessWidget {
                     ],
                   );
                 },
+              ),
+              SizedBox(
+                height: 20,
               ),
               const Text(
                   "Dựa trên những lựa chọn này để giới thiệu cho bạn những phim mới nhất theo thể loại bạn chọn (có thể thay đổi trong Cài đặt)"),

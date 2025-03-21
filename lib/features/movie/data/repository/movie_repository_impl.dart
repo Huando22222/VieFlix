@@ -20,7 +20,8 @@ class MovieRepositoryImpl implements MovieRepository {
           await movieRemoteDataSource.getListFeatureMovie(link: link);
       return Right(result);
     } catch (e) {
-      return Left(ServerFailure(errorMessage: Constants.errorServerString));
+      return Left(
+          ServerFailure(errorMessage: " ${Constants.errorServerString} -> $e"));
     }
   }
 
@@ -32,7 +33,8 @@ class MovieRepositoryImpl implements MovieRepository {
           slug: slug, source: source);
       return Right(result);
     } catch (e) {
-      return Left(ServerFailure(errorMessage: Constants.errorServerString));
+      return Left(
+          ServerFailure(errorMessage: " ${Constants.errorServerString} -> $e"));
     }
   }
 
@@ -48,7 +50,8 @@ class MovieRepositoryImpl implements MovieRepository {
       );
       return Right(result);
     } catch (e) {
-      return Left(ServerFailure(errorMessage: Constants.errorServerString));
+      return Left(
+          ServerFailure(errorMessage: " ${Constants.errorServerString} -> $e"));
     }
   }
 }

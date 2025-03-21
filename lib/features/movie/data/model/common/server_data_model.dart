@@ -11,7 +11,7 @@ class ServerDataModel extends ServerDataEntity {
       ServerDataModel(
         name: json["name"],
         slug: json["slug"],
-        linkEmbed: json['link_embed'] ?? json['embed'],
-        linkM3U8: json['link_m3u8'] ?? json['m3u8'],
+        linkEmbed: json['link_embed'] ?? json['embed'] ?? "",
+        linkM3U8: json['link_m3u8'] ?? json['m3u8'] ?? "",
       );
 }

@@ -17,9 +17,9 @@ if (keystorePropertiesFile.exists()) {
 android {
     // namespace = "huando.com.vie_flix"
     namespace = "com.huando.vie_flix"
-    // mevivu.com.see
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    ndkVersion = "25.1.8937393"
+    // ndkVersion = flutter.ndkVersion
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
