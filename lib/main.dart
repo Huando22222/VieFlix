@@ -15,12 +15,15 @@ void main() async {
   setupServiceLocator();
   final appSettingController = Get.put(AppSettingController());
   await appSettingController.loadSettings();
-
-  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   final initialRoute = appSettingController.isShowIntro.value
       ? AppRoute.onBoardingScreen
       : AppRoute.mainScreen;
-  runApp(MyApp(initialRoute: initialRoute));
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then(
+    (_) {
+      runApp(MyApp(initialRoute: initialRoute));
+    },
+  );
 }
 
 class MyApp extends StatelessWidget {
