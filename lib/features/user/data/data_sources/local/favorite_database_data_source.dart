@@ -50,7 +50,6 @@ class FavoriteDatabaseDataSource {
   Future<List<FavoriteEntity>> getFavorites() async {
     final db = await _dbHelper.database;
     final List<Map<String, dynamic>> favorites = await db.query('favorite');
-    log(" db getFavorites: ${favorites.length}");
     return favorites.map((e) => FavoriteModel.fromJson(e)).toList();
   }
 }

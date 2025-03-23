@@ -31,7 +31,10 @@ class DashBoardScreen extends StatelessWidget {
           alignment: Alignment.center,
           child: Text(
             'VieFlix',
-            style: Theme.of(context).textTheme.headlineLarge,
+            style: Theme.of(context)
+                .textTheme
+                .headlineLarge!
+                .copyWith(color: Theme.of(context).colorScheme.primary),
           ),
         ),
         SizedBox(
@@ -86,7 +89,7 @@ class DashBoardScreen extends StatelessWidget {
                 title: "Thể loại",
                 description:
                     "Danh sách phim bạn đã thêm vào trước đó.\nThẻ xanh là nguồn KKphim\nThẻ cam là NguonC",
-                child: BuildListWiewCardWidget(
+                child: BuildListViewCardWidget(
                   isLoading:
                       dashBoardController.isLoadingLatestMoviesKKPhim.value,
                   list: dashBoardController.latestMoviesKKPhim.value
@@ -126,7 +129,9 @@ class DashBoardScreen extends StatelessWidget {
                                 AppRoute.moreMovieScreen,
                                 arguments: {
                                   'type':
-                                      dashBoardController.favName[index].slug
+                                      dashBoardController.favName[index].slug,
+                                  'title':
+                                      dashBoardController.favName[index].name
                                 },
                               );
                             },
@@ -135,7 +140,7 @@ class DashBoardScreen extends StatelessWidget {
                             height: size.height * 0.3,
                             child: Obx(
                               () {
-                                return BuildListWiewCardWidget(
+                                return BuildListViewCardWidget(
                                   isLoading: dashBoardController
                                       .isloadingFavStatesNC[index].value,
                                   list: dashBoardController
@@ -173,7 +178,10 @@ class DashBoardScreen extends StatelessWidget {
           onTap: () {
             Get.toNamed(
               AppRoute.moreMovieScreen,
-              arguments: {'type': 'phim-le'},
+              arguments: {
+                'type': 'phim-le',
+                'title': 'Phim Lẻ',
+              },
             );
           },
         ),
@@ -181,7 +189,7 @@ class DashBoardScreen extends StatelessWidget {
           height: size.height * 0.3,
           child: Obx(
             () {
-              return BuildListWiewCardWidget(
+              return BuildListViewCardWidget(
                 isLoading:
                     dashBoardController.isLoadingFeaturedMoviesKKPhim.value,
                 list: dashBoardController.featuredMoviesKKPhim.value
@@ -206,7 +214,10 @@ class DashBoardScreen extends StatelessWidget {
           onTap: () {
             Get.toNamed(
               AppRoute.moreMovieScreen,
-              arguments: {'type': 'phim-bo'},
+              arguments: {
+                'type': 'phim-bo',
+                'title': 'Phim Bộ',
+              },
             );
           },
         ),
@@ -214,7 +225,7 @@ class DashBoardScreen extends StatelessWidget {
           height: size.height * 0.3,
           child: Obx(
             () {
-              return BuildListWiewCardWidget(
+              return BuildListViewCardWidget(
                 isLoading:
                     dashBoardController.isLoadingSeriesMoviesKKPhim.value,
                 list: dashBoardController.seriesMoviesKKPhim.value
@@ -239,7 +250,10 @@ class DashBoardScreen extends StatelessWidget {
           onTap: () {
             Get.toNamed(
               AppRoute.moreMovieScreen,
-              arguments: {'type': 'hoat-hinh'},
+              arguments: {
+                'type': 'hoat-hinh',
+                'title': 'Hoạt Hình',
+              },
             );
           },
         ),
@@ -247,7 +261,7 @@ class DashBoardScreen extends StatelessWidget {
           height: size.height * 0.3,
           child: Obx(
             () {
-              return BuildListWiewCardWidget(
+              return BuildListViewCardWidget(
                 isLoading:
                     dashBoardController.isLoadingAnimatedMoviesKKPhim.value,
                 list: dashBoardController.animatedMoviesKKPhim.value
@@ -272,7 +286,10 @@ class DashBoardScreen extends StatelessWidget {
           onTap: () {
             Get.toNamed(
               AppRoute.moreMovieScreen,
-              arguments: {'type': 'tv-shows'},
+              arguments: {
+                'type': 'tv-shows',
+                'title': 'TV shows',
+              },
             );
           },
         ),
@@ -280,7 +297,7 @@ class DashBoardScreen extends StatelessWidget {
           height: size.height * 0.3,
           child: Obx(
             () {
-              return BuildListWiewCardWidget(
+              return BuildListViewCardWidget(
                 isLoading: dashBoardController.isLoadingTvShowsKKPhim.value,
                 list: dashBoardController.tvShowsKKPhim.value
                     .map((e) => CardEntity(

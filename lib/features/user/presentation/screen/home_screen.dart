@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vie_flix/features/user/presentation/controller/app_setting_controller.dart';
@@ -16,13 +18,19 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       // backgroundColor: Colors.amber,
       extendBody: true,
-      body: Obx(
-        () {
-          return IndexedStack(
-            index: bottomNavigationController.currentIndex.value,
-            children: bottomNavigationController.pages,
-          );
+      body: GestureDetector(
+        onTap: () {
+          // FocusScope.of(context).unfocus();
+          log("message");
         },
+        child: Obx(
+          () {
+            return IndexedStack(
+              index: bottomNavigationController.currentIndex.value,
+              children: bottomNavigationController.pages,
+            );
+          },
+        ),
       ),
       bottomNavigationBar: Obx(
         () {

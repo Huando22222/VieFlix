@@ -20,35 +20,14 @@ class MoreScreen extends StatelessWidget {
             fit: BoxFit.cover,
             height: MediaQuery.of(context).size.height * 0.15,
           ),
-
-          // _buildSession(
-          //   name: 'Ứng dụng',
-          //   children: [
-          //     _buildItem(
-          //       name: 'Gợi ý phim',
-          //       path: 'assets/images/fav_icon.png',
-          //       onTap: () {},
-          //     ),
-          //     Divider(),
-          //     _buildItem(
-          //       name: 'Playlist',
-          //       path: 'assets/images/playlist_icon.png',
-          //       onTap: () {},
-          //     ),
-          //     Divider(),
-          //     _buildItem(
-          //       name: 'Góp ý về ứng dụng',
-          //       path: 'assets/images/unity_icon.png',
-          //       onTap: () {},
-          //     ),
-          //   ],
-          // ),
           _buildSession(
+            context: context,
             name: 'Ứng dụng',
             children: [
               Obx(
                 () {
                   return _buildItem(
+                    context: context,
                     name: 'Settings',
                     path: 'assets/images/fav_icon.png',
                     icon: appSettingController.isExpandedSetting.value
@@ -139,10 +118,15 @@ class MoreScreen extends StatelessWidget {
               )
             ],
           ),
+          SizedBox(
+            height: 10,
+          ),
           _buildSession(
+            context: context,
             name: 'Giới thiệu',
             children: [
               _buildItem(
+                context: context,
                 name: 'Điều khoản sử dụng & Bảo mật',
                 path: 'assets/images/copyright_icon.png',
                 icon: Icons.arrow_forward_ios_rounded,
@@ -157,11 +141,17 @@ class MoreScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSession({required String name, required List<Widget> children}) {
+  Widget _buildSession(
+      {required BuildContext context,
+      required String name,
+      required List<Widget> children}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(name),
+        Text(
+          name,
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
           decoration: BoxDecoration(
@@ -177,6 +167,7 @@ class MoreScreen extends StatelessWidget {
   }
 
   Widget _buildItem({
+    required BuildContext context,
     required String name,
     required String path,
     VoidCallback? onTap,
@@ -194,7 +185,7 @@ class MoreScreen extends StatelessWidget {
               Image.asset(
                 path,
                 height: 34,
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.primary,
               ),
               Text(name),
               const Spacer(),

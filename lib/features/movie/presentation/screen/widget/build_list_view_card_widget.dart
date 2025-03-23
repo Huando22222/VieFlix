@@ -5,10 +5,10 @@ import 'package:vie_flix/features/movie/domain/entity/card_entity.dart';
 import 'package:vie_flix/features/movie/presentation/screen/widget/card_widget.dart';
 import 'package:vie_flix/features/movie/presentation/screen/widget/ske_card_widget.dart';
 
-class BuildListWiewCardWidget extends StatelessWidget {
+class BuildListViewCardWidget extends StatelessWidget {
   final List<CardEntity> list;
   final bool isLoading;
-  const BuildListWiewCardWidget({
+  const BuildListViewCardWidget({
     super.key,
     required this.list,
     required this.isLoading,

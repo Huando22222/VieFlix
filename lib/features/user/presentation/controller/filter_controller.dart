@@ -25,7 +25,6 @@ class FilterController extends GetxController {
       final List<CategoryEntity> categories =
           await dbSource.getSelectedCategories();
       fav.assignAll(categories);
-      log("categories : ${categories.length}");
       categoriesLoaded.complete();
     } catch (e, stackTrace) {
       log('Error loading categories: $e = $stackTrace');
