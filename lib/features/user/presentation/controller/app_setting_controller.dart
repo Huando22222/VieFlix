@@ -27,61 +27,62 @@ class AppSettingController extends GetxController {
 
   Future<void> loadSettings() async {
     isLoadingSetting.value = true;
-    final prefs = await SharedPreferences.getInstance();
+    final pref = await SharedPreferences.getInstance();
 
-    bool isShowcaseTriggered = prefs.getBool('isShowcaseTriggered') ?? true;
+    bool isShowcaseTriggered = pref.getBool('isShowcaseTriggered') ?? true;
     isShowcaseTriggeredMovieDetail = isShowcaseTriggered;
     isShowcaseTriggeredDashboard = isShowcaseTriggered;
     //
-    isShowIntro.value = prefs.getBool('isShowIntro') ?? true;
-    isDarkTheme.value = prefs.getBool('isDarkTheme') ?? true;
+    isShowIntro.value = pref.getBool('isShowIntro') ?? true;
+    isDarkTheme.value = pref.getBool('isDarkTheme') ?? true;
     Get.changeTheme(isDarkTheme.value ? AppTheme.dark : AppTheme.light);
-    isExpandedSetting.value = prefs.getBool('isExpandedSetting') ?? false;
-    isAutoPlayVideo.value = prefs.getBool('isAutoPlayVideo') ?? false;
-    isShowTitleMovie.value = prefs.getBool('isShowTitleMovie') ?? false;
-    isShowGridEpisodes.value = prefs.getBool('isShowGridEpisodes') ?? true;
+    isExpandedSetting.value = pref.getBool('isExpandedSetting') ?? false;
+    isAutoPlayVideo.value = pref.getBool('isAutoPlayVideo') ?? false;
+    isShowTitleMovie.value = pref.getBool('isShowTitleMovie') ?? false;
+    isShowGridEpisodes.value = pref.getBool('isShowGridEpisodes') ?? true;
     isLoadingSetting.value = false;
   }
 
   void changeShowcaseTriggered({required bool value}) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('isShowcaseTriggered', value);
+    final pref = await SharedPreferences.getInstance();
+    await pref.setBool('isShowcaseTriggered', value);
   }
 
   void changeTheme() async {
-    final prefs = await SharedPreferences.getInstance();
+    final pref = await SharedPreferences.getInstance();
     Get.changeTheme(isDarkTheme.value ? AppTheme.light : AppTheme.dark);
     isDarkTheme.value = !isDarkTheme.value;
-    await prefs.setBool('isDarkTheme', isDarkTheme.value);
+    log(isDarkTheme.value.toString());
+    await pref.setBool('isDarkTheme', isDarkTheme.value);
   }
 
   void changeShowIntro() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('isShowIntro', !isShowIntro.value);
+    final pref = await SharedPreferences.getInstance();
+    await pref.setBool('isShowIntro', !isShowIntro.value);
     isShowIntro.value = !isShowIntro.value;
   }
 
   void changeExpandedSetting() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('isExpandedSetting', !isExpandedSetting.value);
+    final pref = await SharedPreferences.getInstance();
+    await pref.setBool('isExpandedSetting', !isExpandedSetting.value);
     isExpandedSetting.value = !isExpandedSetting.value;
   }
 
   void changeAutoPlayVideo() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('isAutoPlayVideo', !isAutoPlayVideo.value);
+    final pref = await SharedPreferences.getInstance();
+    await pref.setBool('isAutoPlayVideo', !isAutoPlayVideo.value);
     isAutoPlayVideo.value = !isAutoPlayVideo.value;
   }
 
   void changeShowTitleMovie() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('isShowTitleMovie', !isShowTitleMovie.value);
+    final pref = await SharedPreferences.getInstance();
+    await pref.setBool('isShowTitleMovie', !isShowTitleMovie.value);
     isShowTitleMovie.value = !isShowTitleMovie.value;
   }
 
   void changeShowGridEpisodes() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('isShowGridEpisodes', !isShowGridEpisodes.value);
+    final pref = await SharedPreferences.getInstance();
+    await pref.setBool('isShowGridEpisodes', !isShowGridEpisodes.value);
     isShowGridEpisodes.value = !isShowGridEpisodes.value;
   }
 }

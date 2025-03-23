@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 
 class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
-  const AppBarWidget({super.key});
+  final String? title;
+  const AppBarWidget({
+    super.key,
+    this.title,
+  });
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       // automaticallyImplyLeading: false,
-      title: const Text('VieFlix'),
+      title: Text(title ?? 'VieFlix'),
       centerTitle: true,
       actions: [
         // DrawerWidget(),

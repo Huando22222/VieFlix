@@ -6,7 +6,6 @@ import 'package:vie_flix/common/widget/show_case_custome_widget.dart';
 import 'package:vie_flix/config/routes/app_route.dart';
 import 'package:vie_flix/features/movie/domain/entity/card_entity.dart';
 import 'package:vie_flix/features/movie/presentation/controller/dash_board_controller.dart';
-import 'package:vie_flix/features/movie/presentation/screen/test.dart';
 import 'package:vie_flix/features/movie/presentation/screen/widget/build_list_view_card_widget.dart';
 import 'package:vie_flix/features/movie/presentation/screen/widget/build_title_widget.dart';
 import 'package:vie_flix/features/movie/presentation/screen/widget/carouse_widget.dart';
@@ -36,7 +35,7 @@ class DashBoardScreen extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: size.height * 0.3,
+          height: size.height * 0.45,
           width: double.infinity,
           child: Obx(
             () {
@@ -66,17 +65,15 @@ class DashBoardScreen extends StatelessWidget {
             },
           ),
         ),
-        ElevatedButton(
-            onPressed: () {
-              Get.to(Test());
-            },
-            child: Text("data")),
         BuildTitleWidget(
           title: 'Phim mới cập nhật',
           onTap: () {
             Get.toNamed(
               AppRoute.moreMovieScreen,
-              arguments: {'type': 'moi-cap-nhat-kkphim'},
+              arguments: {
+                'type': 'moi-cap-nhat-kkphim',
+                'title': 'Phim mới cập nhật'
+              },
             );
           },
         ),

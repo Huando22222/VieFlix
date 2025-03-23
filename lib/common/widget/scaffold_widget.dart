@@ -7,16 +7,21 @@ import 'package:vie_flix/common/widget/drawer_widget.dart';
 class ScaffoldWidget extends StatelessWidget {
   final bool? showDrawer;
   final Widget body;
+  final String? title;
   const ScaffoldWidget({
     super.key,
     this.showDrawer,
+    this.title,
     required this.body,
   });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const AppBarWidget(),
+      appBar: AppBarWidget(
+        title: title,
+      ),
+      // appBar: AppBar(),
       endDrawer: showDrawer == true
           ? const Drawer(
               child: DrawerWidget(),

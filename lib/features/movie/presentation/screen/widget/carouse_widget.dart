@@ -21,8 +21,10 @@ class CarouseWidget extends StatelessWidget {
         Get.find<AppSettingController>();
     return CarouselSlider(
       options: CarouselOptions(
+        height: double.infinity,
         autoPlay: true,
         aspectRatio: 2.0,
+        viewportFraction: 1,
         enlargeCenterPage: true,
         autoPlayInterval: const Duration(seconds: 10),
         scrollDirection: Axis.horizontal,
@@ -46,7 +48,7 @@ class CarouseWidget extends StatelessWidget {
                       );
                     },
                     child: Image.network(
-                      data[index].thumbnail,
+                      data[index].poster,
                       fit: BoxFit.cover,
                       width: 1000.0,
                     ),

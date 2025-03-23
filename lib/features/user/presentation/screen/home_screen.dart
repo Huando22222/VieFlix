@@ -14,6 +14,7 @@ class HomeScreen extends StatelessWidget {
     final BottomNavigationController bottomNavigationController =
         Get.find<BottomNavigationController>();
     return Scaffold(
+      // backgroundColor: Colors.amber,
       extendBody: true,
       body: Obx(
         () {

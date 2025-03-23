@@ -33,13 +33,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      initialRoute: initialRoute,
-      getPages: AppPage.routes,
-      initialBinding: RootBinding(),
-      theme: AppTheme.light,
-      darkTheme: AppTheme.dark,
+    final appSettingController = Get.find<AppSettingController>();
+    return Obx(
+      () => GetMaterialApp(
+        debugShowCheckedModeBanner: false,
+        initialRoute: initialRoute,
+        getPages: AppPage.routes,
+        initialBinding: RootBinding(),
+        theme: AppTheme.light,
+        darkTheme: AppTheme.dark,
+        themeMode: appSettingController.isDarkTheme.value
+            ? ThemeMode.dark
+            : ThemeMode.light,
+      ),
     );
   }
 }

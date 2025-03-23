@@ -11,8 +11,9 @@ class MoreMovieController extends GetxController {
 
   var isLoading = false.obs;
   var isLoadingMore = false.obs;
-  var releatedMovie = <FeatureMovieEntity>[].obs;
+  var relatedMovie = <FeatureMovieEntity>[].obs;
   String type = '';
+  String? title;
   String link = '';
   var currentPage = 1;
   final int limit = 10;
@@ -22,6 +23,9 @@ class MoreMovieController extends GetxController {
     super.onInit();
     log('type: ${Get.arguments['type']}');
     setEndPoint(type: Get.arguments['type']);
+    if (Get.arguments['title'] != null) {
+      title = Get.arguments['title'];
+    }
     fetchData(
       page: currentPage,
     );
@@ -43,9 +47,9 @@ class MoreMovieController extends GetxController {
         },
         (r) {
           if (page == 1) {
-            releatedMovie.assignAll(r);
+            relatedMovie.assignAll(r);
           } else {
-            releatedMovie.addAll(r);
+            relatedMovie.addAll(r);
           }
           currentPage = page;
         },
