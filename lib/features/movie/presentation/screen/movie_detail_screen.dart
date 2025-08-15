@@ -82,13 +82,17 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
                             },
                             child: Stack(
                               children: [
-                                Image.network(movieDetailController
-                                            .movieDetail.value!.source ==
-                                        "KK"
-                                    ? movieDetailController
-                                        .movieDetail.value!.thumbUrl
-                                    : movieDetailController
-                                        .movieDetail.value!.posterUrl),
+                                ClipRRect(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(16)),
+                                  child: Image.network(movieDetailController
+                                              .movieDetail.value!.source ==
+                                          "KK"
+                                      ? movieDetailController
+                                          .movieDetail.value!.thumbUrl
+                                      : movieDetailController
+                                          .movieDetail.value!.posterUrl),
+                                ),
                                 Center(
                                   child: Icon(
                                     Icons.play_circle_sharp,
@@ -593,7 +597,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
                                                 final item =
                                                     movieDetailController
                                                         .relatedList[index];
-                                                return CardHoriziontalWidget(
+                                                return CardHorizontalWidget(
                                                   slug: item.slug,
                                                   name: item.name,
                                                   originName: item.originName,

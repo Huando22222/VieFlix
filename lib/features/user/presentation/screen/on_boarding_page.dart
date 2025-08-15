@@ -38,117 +38,108 @@ class OnBoardingPage extends StatelessWidget {
       imagePadding: EdgeInsets.zero,
     );
 
-    return IntroductionScreen(
-      key: introKey,
-      globalBackgroundColor: Theme.of(context).colorScheme.surface,
-      allowImplicitScrolling: true,
-      onDone: () => _onIntroEnd(),
-      onSkip: () => _onIntroEnd(),
-      showSkipButton: false,
-      skipOrBackFlex: 0,
-      nextFlex: 0,
-      showBackButton: false,
-      back: const Icon(Icons.arrow_back),
-      skip: const Text('Skip', style: TextStyle(fontWeight: FontWeight.w600)),
-      next: const Icon(Icons.arrow_forward),
-      done: const Text('Done', style: TextStyle(fontWeight: FontWeight.w600)),
-      curve: Curves.fastLinearToSlowEaseIn,
-      controlsMargin: const EdgeInsets.all(16),
-      controlsPadding: const EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 4.0),
-      dotsDecorator: DotsDecorator(
-        activeColor: Theme.of(context).colorScheme.primary,
-        size: const Size(10.0, 10.0),
-        color: Theme.of(context).colorScheme.secondary,
-        activeSize: const Size(22.0, 10.0),
-        activeShape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(25.0)),
-        ),
-      ),
-      pages: [
-        PageViewModel(
-          title: "",
-          body: " ",
-          image: _buildImage('Vie.png'),
-          decoration: pageDecoration.copyWith(
-            imageFlex: 2,
-            bodyFlex: 1,
-            contentMargin: const EdgeInsets.symmetric(horizontal: 16),
-            titleTextStyle: Theme.of(context).textTheme.headlineMedium,
-            bodyTextStyle: Theme.of(context).textTheme.headlineMedium,
+    return SafeArea(
+      child: IntroductionScreen(
+        key: introKey,
+        globalBackgroundColor: Theme.of(context).colorScheme.surface,
+        allowImplicitScrolling: true,
+        onDone: () => _onIntroEnd(),
+        onSkip: () => _onIntroEnd(),
+        showSkipButton: false,
+        skipOrBackFlex: 0,
+        nextFlex: 0,
+        showBackButton: false,
+        back: const Icon(Icons.arrow_back),
+        skip: const Text('Skip', style: TextStyle(fontWeight: FontWeight.w600)),
+        next: const Icon(Icons.arrow_forward),
+        done: const Text('Done', style: TextStyle(fontWeight: FontWeight.w600)),
+        curve: Curves.fastLinearToSlowEaseIn,
+        controlsMargin: const EdgeInsets.all(16),
+        controlsPadding: const EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 4.0),
+        dotsDecorator: DotsDecorator(
+          activeColor: Theme.of(context).colorScheme.primary,
+          size: const Size(10.0, 10.0),
+          color: Theme.of(context).colorScheme.secondary,
+          activeSize: const Size(22.0, 10.0),
+          activeShape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(25.0)),
           ),
         ),
-        PageViewModel(
-          title: "Chọn thể loại phim\nbạn yêu thích",
-          bodyWidget: Column(
-            children: [
-              Obx(
-                () {
-                  return Wrap(
-                    children: [
-                      ...List.generate(
+        pages: [
+          PageViewModel(
+            title: "",
+            body: " ",
+            image: _buildImage('Vie.png'),
+            decoration: pageDecoration.copyWith(
+              imageFlex: 2,
+              bodyFlex: 1,
+              contentMargin: const EdgeInsets.symmetric(horizontal: 16),
+              titleTextStyle: Theme.of(context).textTheme.headlineMedium,
+              bodyTextStyle: Theme.of(context).textTheme.headlineMedium,
+            ),
+          ),
+          PageViewModel(
+            title: "Chọn thể loại phim yêu thích",
+            bodyWidget: SafeArea(
+              child: Column(
+                children: [
+                  Obx(
+                    () => Wrap(
+                      spacing: 8.0,
+                      runSpacing: 8.0,
+                      children: List.generate(
                         categories.length,
                         (index) {
                           final isSelected =
                               filterController.fav.contains(categories[index]);
-                          return GestureDetector(
-                            onTap: () {
-                              filterController
-                                  .onSelectFavorite(categories[index]);
-                            },
-                            child: Container(
-                              margin: const EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 5,
-                              ),
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 5,
-                              ),
-                              decoration: BoxDecoration(
-                                color: isSelected
-                                    ? Theme.of(context).colorScheme.primary
-                                    : Colors.transparent,
-                                border: Border.all(
-                                    color:
-                                        Theme.of(context).colorScheme.primary),
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(10)),
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    categories[index].name,
-                                    style: isSelected
-                                        ? Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium!
-                                            .copyWith(color: AppColor.darkText)
-                                        : Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium,
+                          return ChoiceChip(
+                            label: Text(
+                              categories[index].name,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .copyWith(
+                                    color: isSelected
+                                        ? Colors.white
+                                        : Theme.of(context).colorScheme.primary,
+                                    fontWeight: FontWeight.w600,
                                   ),
-                                ],
-                              ),
                             ),
+                            selected: isSelected,
+                            selectedColor:
+                                Theme.of(context).colorScheme.primary,
+                            backgroundColor: AppColor.lightBackground,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              side: BorderSide(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .primary
+                                      .withOpacity(0.5)),
+                            ),
+                            onSelected: (_) => filterController
+                                .onSelectFavorite(categories[index]),
                           );
                         },
-                        growable: true,
                       ),
-                    ],
-                  );
-                },
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    "Chúng tôi sẽ đề xuất các bộ phim mới nhất dựa trên lựa chọn của bạn (có thể thay đổi trong Cài đặt).",
+                    style: Theme.of(context).textTheme.bodyMedium,
+                    textAlign: TextAlign.center,
+                  ),
+                ],
               ),
-              SizedBox(
-                height: 20,
-              ),
-              const Text(
-                  "Dựa trên những lựa chọn này để giới thiệu cho bạn những phim mới nhất theo thể loại bạn chọn (có thể thay đổi trong Cài đặt)"),
-            ],
+            ),
+            decoration: pageDecoration.copyWith(
+              bodyFlex: 3,
+              imageFlex: 0,
+            ),
           ),
-          decoration: pageDecoration,
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:vie_flix/common/widget/scroll_colum_padding_widget.dart';
 
 class PolicyScreen extends StatelessWidget {
   const PolicyScreen({super.key});
@@ -8,137 +7,104 @@ class PolicyScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Policy"),
-        backgroundColor: Colors.deepPurple,
+        title: Text(
+          'Chính sách',
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+        ),
+        backgroundColor: Theme.of(context).colorScheme.primary,
         centerTitle: true,
         elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
       ),
-      body: ScrollColumPaddingWidget(
-        children: [
-          _buildSession(
-            title: "Mục đích sử dụng",
-            icon: Icons.lightbulb,
-            child: RichText(
-              text: const TextSpan(
-                style: TextStyle(color: Colors.black, fontSize: 16),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildSession(
+                context: context,
+                title: 'Mục đích sử dụng',
+                icon: Icons.lightbulb,
                 children: [
-                  TextSpan(
-                    text:
-                        "Ứng dụng VieFlix được phát triển với mục tiêu cung cấp một nền tảng học tập và nghiên cứu về điện ảnh cho cộng đồng. ",
-                  ),
-                  TextSpan(
-                    text: "VieFlix",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  TextSpan(
-                    text:
-                        " tập trung vào việc cung cấp các tài liệu tham khảo, phân tích và đánh giá về các tác phẩm điện ảnh.",
+                  Text(
+                    'Ứng dụng VieFlix được phát triển với mục tiêu cung cấp một nền tảng học tập và nghiên cứu về điện ảnh cho cộng đồng. VieFlix tập trung vào việc cung cấp các tài liệu tham khảo, phân tích và đánh giá về các tác phẩm điện ảnh.',
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ],
               ),
-            ),
-          ),
-          const SizedBox(height: 20),
-          _buildSession(
-            title: "Nguồn dữ liệu và bản quyền",
-            icon: Icons.library_books,
-            child: RichText(
-              text: const TextSpan(
-                style: TextStyle(color: Colors.black, fontSize: 16),
+              const SizedBox(height: 16),
+              _buildSession(
+                context: context,
+                title: 'Nguồn dữ liệu và bản quyền',
+                icon: Icons.library_books,
                 children: [
-                  TextSpan(
-                    text:
-                        "Ứng dụng sử dụng các nguồn dữ liệu công khai từ các nền tảng chia sẻ phim trực tuyến như ",
-                  ),
-                  TextSpan(
-                    text: "KKphim",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  TextSpan(
-                    text: ", ",
-                  ),
-                  TextSpan(
-                    text: "NguonC",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  TextSpan(
-                    text: ", và ",
-                  ),
-                  TextSpan(
-                    text: "Ophim",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  TextSpan(
-                    text:
-                        " để xây dựng thư viện phim tham khảo. Tuy nhiên, ứng dụng không lưu trữ bất kỳ nội dung phim nào trên máy chủ của mình.",
+                  Text(
+                    'Ứng dụng sử dụng các nguồn dữ liệu công khai từ các nền tảng chia sẻ phim trực tuyến như KKphim, NguonC, và Ophim để xây dựng thư viện phim tham khảo. Tuy nhiên, ứng dụng không lưu trữ bất kỳ nội dung phim nào trên máy chủ của mình.',
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ],
               ),
-            ),
-          ),
-          const SizedBox(height: 20),
-          _buildSession(
-            title: "Chính sách bảo mật",
-            icon: Icons.privacy_tip,
-            child: RichText(
-              text: const TextSpan(
-                style: TextStyle(color: Colors.black, fontSize: 16),
+              const SizedBox(height: 16),
+              _buildSession(
+                context: context,
+                title: 'Chính sách bảo mật',
+                icon: Icons.privacy_tip,
                 children: [
-                  TextSpan(
-                    text: "- Lưu trữ dữ liệu cục bộ: ",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  TextSpan(
+                  _buildListItem(
+                    context: context,
                     text:
-                        "Tất cả các cài đặt cá nhân, lịch sử tìm kiếm và danh sách yêu thích sẽ được lưu trên thiết bị của bạn.\n",
+                        'Lưu trữ dữ liệu cục bộ: Tất cả các cài đặt cá nhân, lịch sử tìm kiếm và danh sách yêu thích sẽ được lưu trên thiết bị của bạn.',
                   ),
-                  TextSpan(
-                    text: "- Bảo mật thông tin đăng nhập: ",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  TextSpan(
-                    text: "Thông tin được mã hóa và bảo vệ an toàn.\n",
-                  ),
-                  TextSpan(
-                    text: "- Không chia sẻ thông tin cá nhân: ",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  TextSpan(
+                  _buildListItem(
+                    context: context,
                     text:
-                        "Chúng tôi cam kết không chia sẻ thông tin cá nhân với bên thứ ba.\n",
+                        'Bảo mật thông tin đăng nhập: Thông tin được mã hóa và bảo vệ an toàn.',
+                  ),
+                  _buildListItem(
+                    context: context,
+                    text:
+                        'Không chia sẻ thông tin cá nhân: Chúng tôi cam kết không chia sẻ thông tin cá nhân với bên thứ ba.',
                   ),
                 ],
               ),
-            ),
-          ),
-          const SizedBox(height: 20),
-          _buildSession(
-            title: "Lưu ý",
-            icon: Icons.warning,
-            child: RichText(
-              text: const TextSpan(
-                style: TextStyle(color: Colors.black, fontSize: 16),
+              const SizedBox(height: 16),
+              _buildSession(
+                context: context,
+                title: 'Lưu ý',
+                icon: Icons.warning,
                 children: [
-                  TextSpan(
-                    text: "Nếu có thắc mắc hoặc góp ý xin liên hệ \nGmail:",
+                  Text(
+                    'Nếu có thắc mắc hoặc góp ý, xin liên hệ qua Gmail: ',
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
-                  TextSpan(
-                    text: " Huando.work@gmail.com",
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                  Text(
+                    'Huando.work@gmail.com',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
                   ),
                 ],
               ),
-            ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
 
   Widget _buildSession({
+    required BuildContext context,
     required String title,
-    required Widget child,
-    IconData? icon,
+    required IconData icon,
+    required List<Widget> children,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -146,34 +112,60 @@ class PolicyScreen extends StatelessWidget {
         Row(
           children: [
             Container(
-              padding: const EdgeInsets.all(10),
-              decoration: const BoxDecoration(
-                color: Colors.deepPurple,
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primary,
                 shape: BoxShape.circle,
               ),
               child: Icon(icon, color: Colors.white, size: 20),
             ),
-            const SizedBox(width: 10),
+            const SizedBox(width: 12),
             Text(
               title,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.deepPurple,
-              ),
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
             ),
           ],
         ),
-        const SizedBox(height: 10),
-        Container(
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: Colors.grey[100],
-            borderRadius: BorderRadius.circular(10),
+        const SizedBox(height: 12),
+        Card(
+          elevation: 4,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
           ),
-          child: child,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: children,
+            ),
+          ),
         ),
       ],
+    );
+  }
+
+  Widget _buildListItem({
+    required BuildContext context,
+    required String text,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Icon(Icons.circle, size: 8, color: Colors.grey),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              text,
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

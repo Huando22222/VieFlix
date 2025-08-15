@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vie_flix/config/routes/app_route.dart';
 import 'package:vie_flix/features/user/presentation/controller/app_setting_controller.dart';
-import 'package:vie_flix/common/widget/Scroll_Colum_padding_widget.dart';
 
 class MoreScreen extends StatelessWidget {
   const MoreScreen({super.key});
@@ -11,156 +10,164 @@ class MoreScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final AppSettingController appSettingController =
         Get.find<AppSettingController>();
-    return Center(
-      child: ScrollColumPaddingWidget(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Image.asset(
-            'assets/images/Vie.png',
-            fit: BoxFit.cover,
-            height: MediaQuery.of(context).size.height * 0.15,
-          ),
-          _buildSession(
-            context: context,
-            name: 'Ứng dụng',
+    return SafeArea(
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
+          child: Column(
             children: [
-              Obx(
-                () {
-                  return _buildItem(
-                    context: context,
-                    name: 'Settings',
-                    path: 'assets/images/fav_icon.png',
-                    icon: appSettingController.isExpandedSetting.value
-                        ? Icons.keyboard_arrow_up_rounded
-                        : Icons.keyboard_arrow_down_rounded,
-                    onTap: () {
-                      appSettingController.changeExpandedSetting();
-                    },
-                    isExpanded: appSettingController.isExpandedSetting.value,
-                    children: [
-                      Row(
+              // Logo
+              Image.asset(
+                'assets/images/Vie.png',
+                fit: BoxFit.contain,
+                height: MediaQuery.of(context).size.height * 0.12,
+              ),
+              const SizedBox(height: 24),
+              // Application Section
+              _buildSession(
+                context: context,
+                title: 'Ứng dụng',
+                children: [
+                  Obx(() => _buildExpandableItem(
+                        context: context,
+                        title: 'Cài đặt',
+                        iconPath: 'assets/images/fav_icon.png',
+                        isExpanded:
+                            appSettingController.isExpandedSetting.value,
+                        onTap: appSettingController.changeExpandedSetting,
                         children: [
-                          const Expanded(
-                            flex: 1,
-                            child: SizedBox(),
+                          _buildSwitchTile(
+                            context: context,
+                            title: 'Chế độ tối',
+                            value: appSettingController.isDarkTheme.value,
+                            onChanged: (value) {
+                              appSettingController.changeTheme();
+                            },
                           ),
-                          Expanded(
-                            flex: 3,
-                            child: Column(
-                              children: [
-                                ListTile(
-                                  contentPadding: EdgeInsets.zero,
-                                  title: Text(
-                                    "Dark mode",
-                                    style:
-                                        Theme.of(context).textTheme.bodyMedium,
-                                  ),
-                                  trailing: Switch(
-                                    value:
-                                        appSettingController.isDarkTheme.value,
-                                    onChanged: (value) {
-                                      appSettingController.changeTheme();
-                                    },
-                                  ),
-                                ),
-                                ListTile(
-                                  contentPadding: EdgeInsets.zero,
-                                  title: Text(
-                                    "Hiện tên phim",
-                                    style:
-                                        Theme.of(context).textTheme.bodyMedium,
-                                  ),
-                                  trailing: Switch(
-                                    value: appSettingController
-                                        .isShowTitleMovie.value,
-                                    onChanged: (value) {
-                                      appSettingController
-                                          .changeShowTitleMovie();
-                                    },
-                                  ),
-                                ),
-                                ListTile(
-                                  contentPadding: EdgeInsets.zero,
-                                  title: Text(
-                                    "tự động phát video",
-                                    style:
-                                        Theme.of(context).textTheme.bodyMedium,
-                                  ),
-                                  trailing: Switch(
-                                    value: appSettingController
-                                        .isAutoPlayVideo.value,
-                                    onChanged: (value) {
-                                      appSettingController
-                                          .changeAutoPlayVideo();
-                                    },
-                                  ),
-                                ),
-                                ListTile(
-                                  contentPadding: EdgeInsets.zero,
-                                  title: Text(
-                                    "Chọn lại thể loại đề xuất",
-                                    style:
-                                        Theme.of(context).textTheme.bodyMedium,
-                                  ),
-                                  onTap: () {
-                                    appSettingController.changeShowIntro();
-                                    Get.offAllNamed(AppRoute.onBoardingScreen);
-                                  },
-                                ),
-                              ],
+                          _buildSwitchTile(
+                            context: context,
+                            title: 'Hiện tên phim',
+                            value: appSettingController.isShowTitleMovie.value,
+                            onChanged: (value) {
+                              appSettingController.changeShowTitleMovie();
+                            },
+                          ),
+                          _buildSwitchTile(
+                            context: context,
+                            title: 'Tự động phát video',
+                            value: appSettingController.isAutoPlayVideo.value,
+                            onChanged: (value) {
+                              appSettingController.changeAutoPlayVideo();
+                            },
+                          ),
+                          ListTile(
+                            contentPadding:
+                                const EdgeInsets.symmetric(horizontal: 16.0),
+                            title: Text(
+                              'Chọn lại thể loại đề xuất',
+                              style: Theme.of(context).textTheme.bodyMedium,
                             ),
+                            trailing: const Icon(
+                                Icons.arrow_forward_ios_rounded,
+                                size: 16),
+                            onTap: () {
+                              appSettingController.changeShowIntro();
+                              Get.offAllNamed(AppRoute.onBoardingScreen);
+                            },
                           ),
                         ],
-                      ),
-                    ],
-                  );
-                },
-              )
-            ],
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          _buildSession(
-            context: context,
-            name: 'Giới thiệu',
-            children: [
-              _buildItem(
+                      )),
+                ],
+              ),
+              const SizedBox(height: 16),
+              // About Section
+              _buildSession(
                 context: context,
-                name: 'Điều khoản sử dụng & Bảo mật',
-                path: 'assets/images/copyright_icon.png',
-                icon: Icons.arrow_forward_ios_rounded,
-                onTap: () {
-                  Get.toNamed(AppRoute.policyScreen);
-                },
+                title: 'Giới thiệu',
+                children: [
+                  _buildItem(
+                    context: context,
+                    title: 'Điều khoản sử dụng & Bảo mật',
+                    iconPath: 'assets/images/copyright_icon.png',
+                    onTap: () => Get.toNamed(AppRoute.policyScreen),
+                  ),
+                ],
               ),
             ],
           ),
-        ],
+        ),
       ),
     );
   }
 
-  Widget _buildSession(
-      {required BuildContext context,
-      required String name,
-      required List<Widget> children}) {
+  Widget _buildSession({
+    required BuildContext context,
+    required String title,
+    required List<Widget> children,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          name,
-          style: Theme.of(context).textTheme.titleLarge,
+          title,
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.primary,
+              ),
         ),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey.withOpacity(0.5)),
-            borderRadius: const BorderRadius.all(Radius.circular(10)),
+        const SizedBox(height: 8),
+        Card(
+          elevation: 4,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
           ),
           child: Column(
-            children: [...children],
+            children: children,
           ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildExpandableItem({
+    required BuildContext context,
+    required String title,
+    required String iconPath,
+    required bool isExpanded,
+    required VoidCallback onTap,
+    List<Widget>? children,
+  }) {
+    return Column(
+      children: [
+        ListTile(
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+          leading: Image.asset(
+            iconPath,
+            height: 24,
+            color: Theme.of(context).colorScheme.primary,
+          ),
+          title: Text(
+            title,
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
+          ),
+          trailing: Icon(
+            isExpanded
+                ? Icons.keyboard_arrow_up_rounded
+                : Icons.keyboard_arrow_down_rounded,
+            size: 20,
+            color: Theme.of(context).colorScheme.primary,
+          ),
+          onTap: onTap,
+        ),
+        AnimatedCrossFade(
+          firstChild: const SizedBox.shrink(),
+          secondChild: Column(children: children ?? []),
+          crossFadeState:
+              isExpanded ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+          duration: const Duration(milliseconds: 200),
         ),
       ],
     );
@@ -168,47 +175,50 @@ class MoreScreen extends StatelessWidget {
 
   Widget _buildItem({
     required BuildContext context,
-    required String name,
-    required String path,
+    required String title,
+    required String iconPath,
     VoidCallback? onTap,
-    bool? isExpanded,
-    IconData? icon,
-    List<Widget>? children,
   }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        InkWell(
-          onTap: onTap,
-          child: Row(
-            children: [
-              Image.asset(
-                path,
-                height: 34,
-                color: Theme.of(context).colorScheme.primary,
-              ),
-              Text(name),
-              const Spacer(),
-              Icon(
-                icon,
-                size: 14,
-              )
-            ],
-          ),
-        ),
-        if (isExpanded != null && isExpanded && children != null)
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.only(top: 8, right: 8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                const Divider(),
-                ...children,
-              ],
+    return ListTile(
+      contentPadding:
+          const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+      leading: Image.asset(
+        iconPath,
+        height: 24,
+        color: Theme.of(context).colorScheme.primary,
+      ),
+      title: Text(
+        title,
+        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+              fontWeight: FontWeight.w600,
             ),
-          ),
-      ],
+      ),
+      trailing: const Icon(
+        Icons.arrow_forward_ios_rounded,
+        size: 16,
+        color: Colors.grey,
+      ),
+      onTap: onTap,
+    );
+  }
+
+  Widget _buildSwitchTile({
+    required BuildContext context,
+    required String title,
+    required bool value,
+    required ValueChanged<bool> onChanged,
+  }) {
+    return ListTile(
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
+      title: Text(
+        title,
+        style: Theme.of(context).textTheme.bodyMedium,
+      ),
+      trailing: Switch(
+        value: value,
+        onChanged: onChanged,
+        activeColor: Theme.of(context).colorScheme.primary,
+      ),
     );
   }
 }

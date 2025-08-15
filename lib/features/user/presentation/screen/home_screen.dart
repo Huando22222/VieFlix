@@ -20,8 +20,7 @@ class HomeScreen extends StatelessWidget {
       extendBody: true,
       body: GestureDetector(
         onTap: () {
-          // FocusScope.of(context).unfocus();
-          log("message");
+          FocusScope.of(context).unfocus();
         },
         child: Obx(
           () {
@@ -40,20 +39,8 @@ class HomeScreen extends StatelessWidget {
               bottom: dv.padding.bottom,
             ),
             decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surface,
-                // themeController.isDarkTheme.value
-                //     ? AppColor.darkBackground
-                //     : AppColor.lightBackground,
-                boxShadow: [
-                  BoxShadow(
-                    color: (appSettingController.isDarkTheme.value
-                            ? AppColor.darkPrimary
-                            : AppColor.lightPrimary)
-                        .withOpacity(0.1),
-                    blurRadius: 10,
-                    offset: Offset(0, -3),
-                  )
-                ]),
+              color: Theme.of(context).colorScheme.surface,
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
